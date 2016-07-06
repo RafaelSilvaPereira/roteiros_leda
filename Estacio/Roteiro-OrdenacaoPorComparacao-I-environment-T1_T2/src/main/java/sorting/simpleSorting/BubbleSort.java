@@ -9,7 +9,7 @@ import sorting.Util;
  */
 public class BubbleSort<T extends Comparable<T>> extends AbstractSorting<T> {
 
-	private final static int MAIOR = 1;
+	private final static int BIGGER = 1;
 
 	@Override
 	public void sort(T[] array, int leftIndex, int rightIndex) {
@@ -17,9 +17,9 @@ public class BubbleSort<T extends Comparable<T>> extends AbstractSorting<T> {
 		do {
 			sorted = true;
 
-			for (int i = leftIndex; i < rightIndex ; i++) {
-				if (array[i].compareTo(array[i+1]) == MAIOR) {
-					Util.swap(array, i, i+1);
+			for (int elementIndex = leftIndex; elementIndex < rightIndex ; elementIndex++) {
+				if (array[elementIndex].compareTo(array[elementIndex+1]) == BIGGER) {
+					Util.swap(array, elementIndex, elementIndex+1);
 					sorted = false;
 				}
 			}

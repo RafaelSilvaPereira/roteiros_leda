@@ -11,15 +11,15 @@ import sorting.Util;
  */
 public class InsertionSort<T extends Comparable<T>> extends AbstractSorting<T> {
 
-	private static final int MENOR = -1;
+	private static final int LOWER = -1;
 
 	@Override
 	public void sort(T[] array, int leftIndex, int rightIndex) {
 		for(int index = leftIndex; index <= rightIndex; index++){
-			int i = index;
-			for(int j = i - 1; j >= leftIndex; j--){
-				if(array[i].compareTo(array[j]) == MENOR){
-					Util.swap(array, i--, j);
+			int elementIndex = index;
+			for(int analysisIndex = elementIndex - 1; analysisIndex >= leftIndex; analysisIndex--){
+				if(array[elementIndex].compareTo(array[analysisIndex]) == LOWER){
+					Util.swap(array, elementIndex--, analysisIndex);
 				}
 			}
 		}
