@@ -24,21 +24,28 @@ public class QuickSort<T extends Comparable<T>> extends AbstractSorting<T> {
 	}
 	
 	private int moveElems(T[] array, int posPivot, int start, int end) {
+		T[] aux = (T[])new Comparable[end - start + 1];
+		int indexAux = 0;
 		T pivot = array[posPivot];
-		Util.swap(array, posPivot, end);
-		posPivot = end;
 		
-		for (int i = end - 1; i >= start; i--) {
-			if (array[i].compareTo(pivot) >= 0) {
-				T elem = array[i];
-				int aux = i;
-				while(aux < end) {
-					array[aux] = array[aux + 1];
-					aux++;
-				} 
-				array[end] = elem;
-				posPivot--;
+		for (T el : array) {
+			if (el.compareTo(pivot) > 0) {
+				aux[indexAux++] = el;
 			}
+		}
+		posPivot = indexAux;
+		for (T el : array) {
+			if (el.compareTo(pivot) == 0) {
+				aux[indexAux++] = el;
+			}
+		}
+		for (T el : array) {
+			if (el.compareTo(pivot) < 0) {
+				aux[indexAux++] = el;
+			}
+		}
+		for (int i = 0; i < aux.length; i++) {
+			array[start + i] = aux[i];
 		}
 		return posPivot;
 	}
