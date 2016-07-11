@@ -12,36 +12,39 @@ import sorting.Util;
  * Notice that if the list has length == 1, it is already sorted.
  */
 public class QuickSort<T extends Comparable<T>> extends AbstractSorting<T> {
-
+	
 	@Override
 	public void sort(T[] array,int leftIndex, int rightIndex) {
 		if (array.length > 1 && rightIndex - leftIndex >= 1) {
 			int posPivot = (leftIndex + rightIndex) / 2;
 			posPivot = moveElems(array, posPivot, leftIndex, rightIndex);
-			sort(array, leftIndex, posPivot);
 			sort(array, posPivot + 1, rightIndex);
+			sort(array, leftIndex, posPivot - 1);
 		}
 	}
-	
+
 	private int moveElems(T[] array, int posPivot, int start, int end) {
-		T[] aux = (T[])new Comparable[end - start + 1];
-		int indexAux = 0;
+		T[] aux = (T[]) new Comparable[end - start + 1];
 		T pivot = array[posPivot];
-		
-		for (T el : array) {
-			if (el.compareTo(pivot) > 0) {
-				aux[indexAux++] = el;
+		int indexAux = 0;
+
+		for (int i = start; i <= end; i++) {
+			if (array[i].compareTo(pivot) < 0) {
+				aux[indexAux] = array[i];
+				indexAux++;
 			}
 		}
-		posPivot = indexAux;
-		for (T el : array) {
-			if (el.compareTo(pivot) == 0) {
-				aux[indexAux++] = el;
+		posPivot = start + indexAux;
+		for (int i = start; i <= end; i++) {
+			if (array[i].compareTo(pivot) == 0) {
+				aux[indexAux] = array[i];
+				indexAux++;
 			}
 		}
-		for (T el : array) {
-			if (el.compareTo(pivot) < 0) {
-				aux[indexAux++] = el;
+		for (int i = start; i <= end; i++) {
+			if (array[i].compareTo(pivot) > 0) {
+				aux[indexAux] = array[i];
+				indexAux++;
 			}
 		}
 		for (int i = 0; i < aux.length; i++) {
