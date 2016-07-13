@@ -6,6 +6,7 @@ import org.junit.Test;
 import sorting.AbstractSorting;
 import sorting.divideAndConquer.MergeSort;
 import sorting.divideAndConquer.QuickSort;
+import sorting.divideAndConquer.quicksort3.QuickSortMedianOfThree;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -23,9 +24,14 @@ public class RandomTest {
 		populaVetor();
 		getImplementation();
 	}
+	
+	private void getImplementation() {
+		//TODO O aluno deve instanciar sua implementação abaixo ao invés de null
+		this.implementation = new MergeSort<>();
+	}
 
 	private void populaVetor() {
-		int size = getRandomNumberInRange(0, 10000);
+		int size = getRandomNumberInRange(99999, 100000);
 		vetor = new Integer[size];
 
 		for(int i = 0; i < size; i++){
@@ -83,11 +89,6 @@ public class RandomTest {
 	@Test
 	public void testSort09() {
 		genericTest(vetor);
-	}
-
-	private void getImplementation() {
-		//TODO O aluno deve instanciar sua implementaÃ§Ã£o abaixo ao invÃ©s de null
-		this.implementation = new QuickSort<>();
 	}
 
 	private static int getRandomNumberInRange(int min, int max) {
