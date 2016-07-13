@@ -31,7 +31,7 @@ public class RandomTest {
 	}
 
 	private void populaVetor() {
-		int size = getRandomNumberInRange(99999, 100000);
+		int size = getRandomNumberInRange(90000, 100000);
 		vetor = new Integer[size];
 
 		for(int i = 0; i < size; i++){
