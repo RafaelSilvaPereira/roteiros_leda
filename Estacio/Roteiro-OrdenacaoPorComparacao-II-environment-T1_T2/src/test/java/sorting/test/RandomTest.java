@@ -29,7 +29,7 @@ public class RandomTest {
 		vetor = new Integer[size];
 
 		for(int i = 0; i < size; i++){
-			vetor[i] = getRandomNumberInRange(0, 10000);
+			vetor[i] = getRandomNumberInRange(-10000, 10000);
 		}
 	}
 
