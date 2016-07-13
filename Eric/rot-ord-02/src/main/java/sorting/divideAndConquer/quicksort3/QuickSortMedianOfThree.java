@@ -1,5 +1,7 @@
 package sorting.divideAndConquer.quicksort3;
 
+import java.awt.SecondaryLoop;
+
 import sorting.AbstractSorting;
 import sorting.Util;
 
@@ -20,56 +22,47 @@ public class QuickSortMedianOfThree<T extends Comparable<T>> extends AbstractSor
     
 	public void sort(T[] array, int leftIndex, int rightIndex){
 		if (array.length > 1 && rightIndex - leftIndex >= 1) {
-			int middle = sortPivots(array, leftIndex, rightIndex);
-			Util.swap(array, middle, rightIndex - 1);
-			int posPivot = rightIndex - 1;
-			posPivot = moveElems(array, posPivot, leftIndex + 1, rightIndex - 1);
+			sortPivots(array, leftIndex, rightIndex);
+			int posPivot = moveElems(array, leftIndex + 1, rightIndex - 1);
 			sort(array, leftIndex, posPivot - 1);
 			sort(array, posPivot + 1, rightIndex);
 		}
 	}
 	
-	private int moveElems(T[] array, int posPivot, int start, int end) {
-		T[] aux = (T[]) new Comparable[end - start + 1];
-		T pivot = array[posPivot];
-		int indexAux = 0;
+	private int moveElems(T[] array, int start, int end) {
+		int backPointer = start -1;
+		int frontPointer = start;
+		T pivot = array[end];
 
-		for (int i = start; i <= end; i++) {
-			if (array[i].compareTo(pivot) < 0) {
-				aux[indexAux] = array[i];
-				indexAux++;
+		while (frontPointer < end && backPointer < end) {
+			if (array[frontPointer].compareTo(pivot) < 0 && frontPointer > backPointer) {
+				backPointer++;
+				Util.swap(array, backPointer, frontPointer);
+			} else {
+				frontPointer++;
 			}
 		}
-		posPivot = start + indexAux;
-		for (int i = start; i <= end; i++) {
-			if (array[i].compareTo(pivot) == 0) {
-				aux[indexAux] = array[i];
-				indexAux++;
-			}
+		backPointer++;
+		while (end > backPointer) {
+			Util.swap(array, end, end - 1);
+			end--;
 		}
-		for (int i = start; i <= end; i++) {
-			if (array[i].compareTo(pivot) > 0) {
-				aux[indexAux] = array[i];
-				indexAux++;
-			}
-		}
-		for (int i = 0; i < aux.length; i++) {
-			array[start + i] = aux[i];
-		}
-		return posPivot;
+//		Util.swap(array, backPointer, end);
+		return backPointer;
 	}
 
-	private int sortPivots(T[] array, int start, int end) {
+	private void sortPivots(T[] array, int start, int end) {
 		int middle = (start + end) / 2;
-		for (int i = 0; i < 2; i++) {
-			if (array[start].compareTo(array[middle]) > 0) {
-				Util.swap(array, start, middle);
-			}
-			if (array[middle].compareTo(array[end]) > 0) {
-				Util.swap(array, middle, end);
-			}
+		if (array[start].compareTo(array[middle]) > 0) {
+			Util.swap(array, start, middle);
 		}
-		return middle;
+		if (array[start].compareTo(array[end]) > 0) {
+			Util.swap(array, start, end);
+		}
+		if (array[middle].compareTo(array[end]) > 0) {
+			Util.swap(array, middle, end);
+		}
+		Util.swap(array, middle, end - 1);
 	}
-	
+
 }
