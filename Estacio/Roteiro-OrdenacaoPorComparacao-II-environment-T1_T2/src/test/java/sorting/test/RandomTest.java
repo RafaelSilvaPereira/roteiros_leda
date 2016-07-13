@@ -26,17 +26,27 @@ public class RandomTest {
 
 	private void populaVetor() {
 		int size = getRandomNumberInRange(0, 10000);
+
 		vetor = new Integer[size];
 
-		for(int i = 0; i < size; i++){
-			vetor[i] = getRandomNumberInRange(-10000, 10000);
+		for(int index = 0; index < size; index++){
+			vetor[index] = getRandomNumberInRange(-10000, 10000);
 		}
 	}
 
 	public void genericTest(Integer[] array) {
 		Integer[] copy1 = Arrays.copyOf(array, array.length);
+		int i = getRandomNumberInRange(0, array.length);
+		int j = getRandomNumberInRange(i, array.length);
+
 		implementation.sort(array);
 		Arrays.sort(copy1);
+		Assert.assertArrayEquals(copy1, array);
+
+		populaVetor();
+		copy1 = Arrays.copyOf(array, array.length);
+		implementation.sort(array, i, j);
+		Arrays.sort(copy1, i, j);
 		Assert.assertArrayEquals(copy1, array);
 	}
 
