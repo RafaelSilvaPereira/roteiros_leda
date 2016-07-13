@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="sorting.test.StudentSortingTest" time="0.045" errors="0" skipped="0">
+<testsuite tests="9" failures="0" name="sorting.test.RandomTest" time="0.061" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="15.0.4"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -62,9 +62,13 @@
     <property name="sun.desktop" value="gnome"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="sorting.test.StudentSortingTest" name="testSort01" time="0.002"/>
-  <testcase classname="sorting.test.StudentSortingTest" name="testSort02" time="0"/>
-  <testcase classname="sorting.test.StudentSortingTest" name="testSort03" time="0"/>
-  <testcase classname="sorting.test.StudentSortingTest" name="testSort04" time="0"/>
-  <testcase classname="sorting.test.StudentSortingTest" name="testSort05" time="0"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort01" time="0.012"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort02" time="0.014"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort03" time="0.005"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort04" time="0.006"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort05" time="0.003"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort06" time="0.002"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort07" time="0.007"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort08" time="0.006"/>
+  <testcase classname="sorting.test.RandomTest" name="testSort09" time="0.004"/>
 </testsuite>
