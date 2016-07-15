@@ -16,40 +16,31 @@ public class QuickSort<T extends Comparable<T>> extends AbstractSorting<T> {
 	@Override
 	public void sort(T[] array,int leftIndex, int rightIndex) {
 		if (array.length > 1 && rightIndex - leftIndex >= 1) {
-			int posPivot = (leftIndex + rightIndex) / 2;
-			posPivot = moveElems(array, posPivot, leftIndex, rightIndex);
+			int posPivot = moveElems(array, leftIndex, rightIndex);
 			sort(array, posPivot + 1, rightIndex);
 			sort(array, leftIndex, posPivot - 1);
 		}
 	}
 
-	private int moveElems(T[] array, int posPivot, int start, int end) {
-		T[] aux = (T[]) new Comparable[end - start + 1];
-		T pivot = array[posPivot];
-		int indexAux = 0;
+	private int moveElems(T[] array, int start, int end) {
+		int backPointer = start -1;
+		int frontPointer = start;
+		T pivot = array[end];
 
-		for (int i = start; i <= end; i++) {
-			if (array[i].compareTo(pivot) < 0) {
-				aux[indexAux] = array[i];
-				indexAux++;
+		while (frontPointer < end && backPointer < end) {
+			if (array[frontPointer].compareTo(pivot) < 0 && frontPointer > backPointer) {
+				backPointer++;
+				Util.swap(array, backPointer, frontPointer);
+			} else {
+				frontPointer++;
 			}
 		}
-		posPivot = start + indexAux;
-		for (int i = start; i <= end; i++) {
-			if (array[i].compareTo(pivot) == 0) {
-				aux[indexAux] = array[i];
-				indexAux++;
-			}
+		backPointer++;
+		while (end > backPointer) {
+			Util.swap(array, end, end - 1);
+			end--;
 		}
-		for (int i = start; i <= end; i++) {
-			if (array[i].compareTo(pivot) > 0) {
-				aux[indexAux] = array[i];
-				indexAux++;
-			}
-		}
-		for (int i = 0; i < aux.length; i++) {
-			array[start + i] = aux[i];
-		}
-		return posPivot;
+//		Util.swap(array, backPointer, end);
+		return backPointer;
 	}
 }
