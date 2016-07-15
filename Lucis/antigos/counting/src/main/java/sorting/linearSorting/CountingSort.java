@@ -14,25 +14,26 @@ import javax.management.RuntimeErrorException;
  */
 public class CountingSort extends AbstractSorting<Integer> {
 
+	private static final Integer BASE_COUNT = 0;
+	private static final Integer ONE_COUNT = 1;
+
 	@Override
 	public void sort(Integer[] array,int leftIndex, int rightIndex) {
 		int biggest, lowest, firstIndex, populateIndex, secondIndex, thirdIndex, finalIndex;
 		if (leftIndex >= rightIndex) return;
-		biggest = array[leftIndex];
-		lowest = array[leftIndex];
+		biggest = lowest = array[leftIndex];
 		for (firstIndex = leftIndex+1; firstIndex <= rightIndex; firstIndex++){
 			if (array[firstIndex] > biggest) biggest = array[firstIndex];
 			if (array[firstIndex] < lowest) lowest = array[firstIndex];
-			
 		}
 		Integer[] counted = new Integer[biggest - lowest + 1];
 		for (populateIndex = leftIndex; populateIndex <= rightIndex; populateIndex++){
-			if (counted[array[populateIndex]-lowest] == null) counted[array[populateIndex]-lowest] = 1;
+			if (counted[array[populateIndex]-lowest] == null) counted[array[populateIndex]-lowest] = ONE_COUNT;
 			else counted[array[populateIndex]-lowest]++;
 		}
 		for (secondIndex = 1; secondIndex < counted.length; secondIndex++){
-			if (counted[secondIndex-1] == null) counted[secondIndex-1] = 0;
-			if (counted[secondIndex] == null) counted[secondIndex] = 0;
+			if (counted[secondIndex-1] == null) counted[secondIndex-1] = BASE_COUNT;
+			if (counted[secondIndex] == null) counted[secondIndex] = BASE_COUNT;
 			counted[secondIndex] += counted[secondIndex-1];
 		}
 		Integer[] ordered = new Integer[array.length];
