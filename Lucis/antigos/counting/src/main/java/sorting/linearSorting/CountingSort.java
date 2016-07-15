@@ -3,6 +3,7 @@ package sorting.linearSorting;
 import sorting.AbstractSorting;
 
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.management.RuntimeErrorException;
 
@@ -41,15 +42,15 @@ public class CountingSort extends AbstractSorting<Integer> {
 			finalIndex = counted[array[thirdIndex]-lowest]--;
 			ordered[finalIndex-1] = array[thirdIndex];
 		}
-		cloneArrays(array, ordered);
+		cloneArrays(array, ordered, leftIndex, rightIndex);
 	}
 	
-	private void cloneArrays(Integer[] a, Integer[] b){
+	private void cloneArrays(Integer[] a, Integer[] b, int from, int to ){
 		if (a.length != b.length) 
 			throw new RuntimeException("Both arrays must be of same size");
 		int cloneIndex;
-		for (cloneIndex = 0; cloneIndex < b.length; cloneIndex++) {
-			a[cloneIndex] = b[cloneIndex];
+		for (cloneIndex = 0; cloneIndex <= to-from; cloneIndex++) {
+			a[cloneIndex+from] = b[cloneIndex];
 		}
 	}
 }
