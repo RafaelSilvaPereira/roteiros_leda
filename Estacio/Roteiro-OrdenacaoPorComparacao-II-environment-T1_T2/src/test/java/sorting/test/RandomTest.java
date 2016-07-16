@@ -41,13 +41,13 @@ public class RandomTest {
 
 		implementation.sort(array);
 		Arrays.sort(copy1);
-		Assert.assertArrayEquals(copy1, array);
+		Assert.assertArrayEquals(Arrays.asList(array).toString(), copy1, array);
 
 		populaVetor();
 		copy1 = Arrays.copyOf(array, array.length);
 		implementation.sort(array, i, j);
 		Arrays.sort(copy1, i, j);
-		Assert.assertArrayEquals(copy1, array);
+		Assert.assertArrayEquals(Arrays.asList(array).toString(), copy1, array);
 	}
 
 	@Test
