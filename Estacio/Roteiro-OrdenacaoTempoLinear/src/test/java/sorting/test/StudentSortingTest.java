@@ -1,6 +1,7 @@
 package sorting.test;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,6 +26,7 @@ public class StudentSortingTest {
 		populaVetorTamanhoImpar(new Integer[] {6, 41, 32, 7, 26, 4, 37, 49, 11, 18, 36});
 		populaVetorRepetido(new Integer[] {4, 9, 3, 4, 0, 5, 1, 4});
 		populaVetorIgual(new Integer[] {6, 6, 6, 6, 6, 6});
+		populaVetor();
 		
 		getImplementation();
 	}
@@ -96,4 +98,86 @@ public class StudentSortingTest {
 	 * PARA TESTAR A ORDENACAO EM UM PEDAÇO DO ARRAY. DICA: PROCUREM SEGUIR A ESTRUTURA DOS
 	 * MÉTODOS DE TESTE ACIMA DESCRITOS, ORDENANDO APENAS UMA PARTE DO ARRAY.
 	 */
+
+	private Integer[] vetor;
+
+	private void populaVetor() {
+		int size = getRandomNumberInRange(0, 10000);
+		vetor = new Integer[size];
+
+		for(int i = 0; i < size; i++){
+			vetor[i] = getRandomNumberInRange(0, 10000);
+		}
+	}
+
+	public void genericTest2(Integer[] array) {
+		Integer[] copy1 = Arrays.copyOf(array, array.length);
+		int i = getRandomNumberInRange(0, array.length);
+		int j = getRandomNumberInRange(i, array.length);
+
+		implementation.sort(array);
+		Arrays.sort(copy1);
+		Assert.assertArrayEquals(copy1, array);
+
+		populaVetor();
+		copy1 = Arrays.copyOf(array, array.length);
+		implementation.sort(array, i, j);
+		Arrays.sort(copy1, i, j);
+		Assert.assertArrayEquals(copy1, array);
+	}
+
+	@Test
+	public void testSort10() {
+		genericTest2(vetor);
+	}
+
+	@Test
+	public void testSort11() {
+		genericTest2(vetor);
+	}
+
+	@Test
+	public void testSort12() {
+		genericTest2(vetor);
+	}
+
+	@Test
+	public void testSort13() {
+		genericTest2(vetor);
+	}
+
+	@Test
+	public void testSort14() {
+		genericTest2(vetor);
+	}
+
+	@Test
+	public void testSort06() {
+		genericTest2(vetor);
+	}
+
+	@Test
+	public void testSort07() {
+		genericTest2(vetor);
+	}
+
+	@Test
+	public void testSort08() {
+		genericTest2(vetor);
+	}
+
+	@Test
+	public void testSort09() {
+		genericTest2(vetor);
+	}
+
+	private static int getRandomNumberInRange(int min, int max) {
+
+		if (min >= max) {
+			throw new IllegalArgumentException("max must be greater than min");
+		}
+
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
+	}
 }
