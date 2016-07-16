@@ -24,31 +24,26 @@ public class RandomTest {
 		populaVetor();
 		getImplementation();
 	}
+	
+	private void getImplementation() {
+		//TODO O aluno deve instanciar sua implementação abaixo ao invés de null
+		this.implementation = new MergeSort<>();
+	}
 
 	private void populaVetor() {
-		int size = getRandomNumberInRange(0, 10000);
+		int size = getRandomNumberInRange(90000, 100000);
 		vetor = new Integer[size];
 
-		for(int index = 0; index < size; index++){
-			vetor[index] = getRandomNumberInRange(-10000, 10000);
+		for(int i = 0; i < size; i++){
+			vetor[i] = getRandomNumberInRange(-10000, 10000);
 		}
 	}
 
 	public void genericTest(Integer[] array) {
 		Integer[] copy1 = Arrays.copyOf(array, array.length);
-		int i = getRandomNumberInRange(0, array.length);
-		int j = getRandomNumberInRange(i, array.length);
-
 		implementation.sort(array);
 		Arrays.sort(copy1);
 		Assert.assertArrayEquals(copy1, array);
-
-		populaVetor();
-		copy1 = Arrays.copyOf(array, array.length);
-		implementation.sort(array, i, j);
-		Arrays.sort(copy1, i, j);
-		Assert.assertArrayEquals(copy1, array);
-		Assert.assertArrayEquals(Arrays.asList(array).toString(), copy1, array);
 	}
 
 	@Test
@@ -94,11 +89,6 @@ public class RandomTest {
 	@Test
 	public void testSort09() {
 		genericTest(vetor);
-	}
-
-	private void getImplementation() {
-		//TODO O aluno deve instanciar sua implementaÃ§Ã£o abaixo ao invÃ©s de null
-		this.implementation = new QuickSortMedianOfThree<>();
 	}
 
 	private static int getRandomNumberInRange(int min, int max) {
