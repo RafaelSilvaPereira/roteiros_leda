@@ -2,6 +2,8 @@ package sorting.linearSorting;
 
 import sorting.AbstractSorting;
 
+import java.util.Arrays;
+
 /**
  * Classe que implementa a estratégia de Counting Sort vista em sala. Procure evitar desperdicio de
  * memoria alocando o array de contadores com o tamanho sendo o máximo inteiro presente no array
@@ -19,20 +21,44 @@ public class CountingSort extends AbstractSorting<Integer> {
             countingVector[array[index]]++;
         }
 
-        sortArray(array, leftIndex, countingVector);
+        unstableSort(array, leftIndex, countingVector);
+        //stableSort(array, leftIndex, rightIndex, countingVector);
+    }
+
+    private void stableSort(Integer[] array, int leftIndex, int rightIndex, Integer[] countingVector) {
+        Integer[] cumulative = new Integer[countingVector.length];
+
+        cumulative[0] = countingVector[0] - 1;
+        for (int index = 1; index < cumulative.length; index++) {
+            cumulative[index] = countingVector[index] + cumulative[index - 1];
+        }
+
+        Integer[] sortedArray = new Integer[array.length];
+        for (int index = rightIndex; index >= leftIndex; index--) {
+            sortedArray[cumulative[array[index]]] = array[index];
+            cumulative[array[index]]--;
+        }
+
+        copyArray(sortedArray, 0, array, leftIndex, rightIndex);
+    }
+
+    private void copyArray(Integer[] sortedArray, int index, Integer[] array, int leftIndex, int rightIndex) {
+        while (index < sortedArray.length && leftIndex <= rightIndex) {
+            array[leftIndex++] = sortedArray[index++];
+        }
     }
 
     private Integer[] constructIntegerArray(int size) {
         Integer[] array = new Integer[size];
 
-        for(int index = 0; index < size; index++){
+        for (int index = 0; index < size; index++) {
             array[index] = 0;
         }
 
         return array;
     }
 
-    private void sortArray(Integer[] array, int leftIndex, Integer[] countingVector) {
+    private void unstableSort(Integer[] array, int leftIndex, Integer[] countingVector) {
 
         int arrayIndex = leftIndex;
         for (int index = 0; index < countingVector.length; index++) {
