@@ -20,7 +20,7 @@ public class CountingSort extends AbstractSorting<Integer> {
         for (int index = leftIndex; index <= rightIndex; index++) {
             countingVector[array[index]]++;
         }
-
+        
         unstableSort(array, leftIndex, countingVector);
         //stableSort(array, leftIndex, rightIndex, countingVector);
     }
@@ -71,7 +71,7 @@ public class CountingSort extends AbstractSorting<Integer> {
 
     private int getBiggestElement(Integer[] array, int leftIndex, int rightIndex) {
         int biggest = 0;
-        for (int index = leftIndex + 1; index <= rightIndex; index++) {
+        for (int index = leftIndex; index <= rightIndex; index++) {
             if (array[index] > biggest) {
                 biggest = array[index];
             }
