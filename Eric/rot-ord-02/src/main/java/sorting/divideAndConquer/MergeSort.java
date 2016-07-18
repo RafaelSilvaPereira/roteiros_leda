@@ -24,7 +24,7 @@ public class MergeSort<T extends Comparable<T>> extends AbstractSorting<T> {
 		int firstPart = start,
 			secPart = middle + 1;
 		T[] auxArray = (T[])new Comparable[end - start + 1];
-		
+
 		int indexAuxArr = 0;
 		while (firstPart <= middle && secPart <= end) {
 			if (array[firstPart].compareTo(array[secPart]) > 0) {
@@ -37,20 +37,18 @@ public class MergeSort<T extends Comparable<T>> extends AbstractSorting<T> {
 			indexAuxArr++;
 		}
 		
-		while (firstPart <= middle) {
-			auxArray[indexAuxArr] = array[firstPart];
-			indexAuxArr++;
-			firstPart++;
+		if (firstPart <= middle) {
+			copyArray(array, auxArray, firstPart, middle, indexAuxArr);
 		}
-		
-		while (secPart <= end) {
-			auxArray[indexAuxArr] = array[secPart];
-			indexAuxArr++;
-			secPart++;
+		if (secPart <= end) {
+			copyArray(array, auxArray, secPart, end, indexAuxArr);
 		}
-		
-		for (int auxPointer = 0; auxPointer < auxArray.length; auxPointer++) {
-			array[auxPointer + start] = auxArray[auxPointer];
+		copyArray(auxArray, array, 0, auxArray.length - 1, start);
+	}
+	
+	private void copyArray(T[] auxArray, T[] mainArray, int from, int to, int start) {
+		for (int pointer = from; pointer <= to; pointer++, start++) {
+			mainArray[start] = auxArray[pointer];
 		}
 	}
 }
