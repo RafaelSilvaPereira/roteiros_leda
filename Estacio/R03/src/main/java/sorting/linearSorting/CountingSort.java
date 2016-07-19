@@ -13,7 +13,8 @@ public class CountingSort extends AbstractSorting<Integer> {
     public void sort(Integer[] array, int leftIndex, int rightIndex) {
         if (array == null || array.length == 0
                 || leftIndex < 0 || rightIndex >= array.length
-                || leftIndex > rightIndex) {
+                || leftIndex > rightIndex
+                || getSmallestElement(array, leftIndex, rightIndex) < 0) {
             return;
         }
 
@@ -71,6 +72,16 @@ public class CountingSort extends AbstractSorting<Integer> {
             }
         }
         return biggest;
+    }
+
+    private int getSmallestElement(Integer[] array, int leftIndex, int rightIndex) {
+        int smallest = Integer.MAX_VALUE;
+        for (int index = leftIndex; index <= rightIndex; index++) {
+            if (array[index] < smallest) {
+                smallest = array[index];
+            }
+        }
+        return smallest;
     }
 
     private Integer[] constructIntegerArray(int size) {
