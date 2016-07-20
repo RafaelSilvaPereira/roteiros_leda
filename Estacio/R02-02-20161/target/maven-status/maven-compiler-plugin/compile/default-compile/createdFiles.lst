@@ -1,0 +1,6 @@
+sorting\Sorting.class
+sorting\divideAndConquer\MergeSort.class
+sorting\AbstractSorting.class
+util\Util.class
+sorting\divideAndConquer\hybridMergesort\HybridMergeSort.class
+sorting\divideAndConquer\QuickSort.class

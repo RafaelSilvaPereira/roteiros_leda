@@ -29,8 +29,8 @@ public class RandomTest {
 		int size = getRandomNumberInRange(0, 10000);
 		vetor = new Integer[size];
 
-		for(int i = 0; i < size; i++){
-			vetor[i] = getRandomNumberInRange(-10000, 10000);
+		for(int index = 0; index < size; index++){
+			vetor[index] = getRandomNumberInRange(-10000, 10000);
 		}
 	}
 
@@ -48,6 +48,7 @@ public class RandomTest {
 		implementation.sort(array, i, j);
 		Arrays.sort(copy1, i, j);
 		Assert.assertArrayEquals(copy1, array);
+		Assert.assertArrayEquals(Arrays.asList(array).toString(), copy1, array);
 	}
 
 	@Test
