@@ -4,9 +4,13 @@ package adt.stack;
 public class StackImpl<T> implements Stack<T> {
 	
 	private static final int ONE = 1;
+	
 	private static final int NOT_INITIALIZED = -1;
+	
 	private T[] array;
+	
 	private int top;
+	
 	private int capacity;
 	
 	@SuppressWarnings("unchecked")
