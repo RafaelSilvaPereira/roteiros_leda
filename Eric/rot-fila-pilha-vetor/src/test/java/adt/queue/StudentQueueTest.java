@@ -12,16 +12,16 @@ public class StudentQueueTest {
 
 	@Before
 	public void setUp() throws QueueOverflowException{
-		queue1 = new QueueImpl<Integer>(6);
+		queue1 = new CircularQueue<Integer>(6);
 		queue1.enqueue(1);
 		queue1.enqueue(2);
 		queue1.enqueue(3);
 		
-		queue2 = new QueueImpl<Integer>(2);
+		queue2 = new CircularQueue<Integer>(2);
 		queue2.enqueue(1);
 		queue2.enqueue(2);
 		
-		queue3 = new QueueImpl<Integer>(6);
+		queue3 = new CircularQueue<Integer>(6);
 	}
 	
 	//MÉTODOS DE TESTE

@@ -1,47 +1,75 @@
 package adt.queue;
 
 public class CircularQueue<T> implements Queue<T> {
-	
+
+	private static final int ZERO = 0;
+
+	private static final int ONE = 1;
+
+	private static final int NOT_INITIALIZED = -1;
+
 	private T[] array;
+
 	private int tail;
+
 	private int head;
+
 	private int elements;
-	
-	public CircularQueue(int size){
-		array = (T[])new Object[size];
-		head = -1;
-		tail = -1;
-		elements = 0;
+
+	private int capacity;
+
+	@SuppressWarnings("unchecked")
+	public CircularQueue(int size) {
+		array = (T[]) new Object[size];
+		capacity = size;
+		head = NOT_INITIALIZED;
+		tail = NOT_INITIALIZED;
+		elements = ZERO;
 	}
-	
+
 	@Override
 	public void enqueue(T element) throws QueueOverflowException {
-		// TODO Auto-generated method stub
+		if (isFull())
+			throw new QueueOverflowException();
 
+		if (element != null) {
+			if (tail == NOT_INITIALIZED)
+				head = tail = 0;
+			else
+				tail = (tail + 1) % capacity;
+			array[tail] = element;
+			elements++;
+		}
 	}
 
 	@Override
 	public T dequeue() throws QueueUnderflowException {
-		// TODO Auto-generated method stub
-		return null;
+		if (isEmpty())
+			throw new QueueUnderflowException();
+		T elem = array[head];
+		elements--;
+		if (head == tail)
+			head = tail = NOT_INITIALIZED;
+		else
+			head = (head + ONE) % capacity;
+		return elem;
 	}
 
 	@Override
 	public T head() {
-		// TODO Auto-generated method stub
-		return null;
+		T elem = null;
+		if (head != NOT_INITIALIZED)
+			elem = array[head];
+		return elem;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return elements == ZERO;
 	}
 
 	@Override
 	public boolean isFull() {
-		// TODO Auto-generated method stub
-		return false;
+		return elements == capacity;
 	}
-
 }
