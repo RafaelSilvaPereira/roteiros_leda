@@ -20,7 +20,7 @@ public class CountingSort extends AbstractSorting<Integer> {
         for (int index = leftIndex; index <= rightIndex; index++) {
             countingVector[array[index]]++;
         }
-        
+
         unstableSort(array, leftIndex, countingVector);
         //stableSort(array, leftIndex, rightIndex, countingVector);
     }
