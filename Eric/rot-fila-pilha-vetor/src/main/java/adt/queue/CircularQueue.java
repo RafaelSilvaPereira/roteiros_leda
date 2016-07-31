@@ -2,11 +2,11 @@ package adt.queue;
 
 public class CircularQueue<T> implements Queue<T> {
 
+	private static final int NOT_INITIALIZED = -1;
+
 	private static final int ZERO = 0;
 
 	private static final int ONE = 1;
-
-	private static final int NOT_INITIALIZED = -1;
 
 	private T[] array;
 
@@ -34,9 +34,9 @@ public class CircularQueue<T> implements Queue<T> {
 
 		if (element != null) {
 			if (tail == NOT_INITIALIZED)
-				head = tail = 0;
+				head = tail = ZERO;
 			else
-				tail = (tail + 1) % capacity;
+				tail = (tail + ONE) % capacity;
 			array[tail] = element;
 			elements++;
 		}
@@ -46,13 +46,13 @@ public class CircularQueue<T> implements Queue<T> {
 	public T dequeue() throws QueueUnderflowException {
 		if (isEmpty())
 			throw new QueueUnderflowException();
-		T elem = array[head];
+		T element = array[head];
 		elements--;
 		if (head == tail)
 			head = tail = NOT_INITIALIZED;
 		else
 			head = (head + ONE) % capacity;
-		return elem;
+		return element;
 	}
 
 	@Override
