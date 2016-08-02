@@ -2,45 +2,74 @@ package adt.queue;
 
 import adt.stack.Stack;
 import adt.stack.StackImpl;
+import adt.stack.StackOverflowException;
+import adt.stack.StackUnderflowException;
 
 public class QueueUsingStack<T> implements Queue<T> {
 
-	private Stack<T> stack1;
-	private Stack<T> stack2;
-	
-	public QueueUsingStack(int size) {
-		stack1 = new StackImpl<T>(size);
-		stack2 = new StackImpl<T>(size);
-	}
-	
-	@Override
-	public void enqueue(T element) throws QueueOverflowException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    private static final int ZERO = 0;
 
-	@Override
-	public T dequeue() throws QueueUnderflowException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    private Stack<T> enqueueStack;
+    private Stack<T> dequeueStack;
 
-	@Override
-	public T head() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    public QueueUsingStack(int size) {
+        if (size < ZERO) {
+            size = ZERO;
+        }
+        enqueueStack = new StackImpl<T>(size);
+        dequeueStack = new StackImpl<T>(size);
+    }
 
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    @Override
+    public void enqueue(T element) throws QueueOverflowException {
+        this.moveElements(this.dequeueStack, this.enqueueStack);
+        try {
+            this.enqueueStack.push(element);
+        } catch (StackOverflowException e) {
+            throw new QueueOverflowException();
+        }
+    }
 
-	@Override
-	public boolean isFull() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    @Override
+    public T dequeue() throws QueueUnderflowException {
+        this.moveElements(this.enqueueStack, this.dequeueStack);
+        try {
+            return this.dequeueStack.pop();
+        } catch (StackUnderflowException e) {
+            throw new QueueUnderflowException();
+        }
+    }
+
+    @Override
+    public T head() {
+        this.moveElements(this.enqueueStack, this.dequeueStack);
+        return this.dequeueStack.top();
+    }
+
+    /**
+     * Fill the second Stack with the elements of the first one.
+     *
+     * @param firstStack  Stack to have elements removed.
+     * @param secondStack Stack to be filled.
+     */
+    private void moveElements(Stack<T> firstStack, Stack<T> secondStack) {
+        try {
+            while (!firstStack.isEmpty()) {
+                secondStack.push(firstStack.pop());
+            }
+        } catch (StackUnderflowException | StackOverflowException exception) {
+            // This is a private method... Trust me... I know what I'm doing...
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.dequeueStack.isEmpty() && this.enqueueStack.isEmpty();
+    }
+
+    @Override
+    public boolean isFull() {
+        return this.dequeueStack.isFull() || this.enqueueStack.isFull();
+    }
 
 }

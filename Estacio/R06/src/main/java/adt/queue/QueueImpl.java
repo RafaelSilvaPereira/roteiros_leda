@@ -1,51 +1,69 @@
 package adt.queue;
 
+import java.util.Arrays;
+
 public class QueueImpl<T> implements Queue<T> {
 
-	private T[] array;
-	private int tail;
-		
-	
-	@SuppressWarnings("unchecked")
-	public QueueImpl(int size) {
-		array = (T[])new Object[size];
-		tail = -1;
-	}
+    private static final int ZERO = 0;
 
-	@Override
-	public T head() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");		
-	}
+    private T[] array;
+    private int tail;
 
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
 
-	@Override
-	public boolean isFull() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
-	
-	private void shiftLeft(){
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    @SuppressWarnings("unchecked")
+    public QueueImpl(int size) {
+        if (size < ZERO) {
+            size = ZERO;
+        }
+        array = (T[]) new Object[size];
+        tail = -1;
+    }
 
-	@Override
-	public void enqueue(T element) throws QueueOverflowException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    @Override
+    public T head() {
+        if (this.isEmpty()) {
+            return null;
+        } else {
+            return this.array[ZERO];
+        }
+    }
 
-	@Override
-	public T dequeue() throws QueueUnderflowException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    @Override
+    public boolean isEmpty() {
+        return this.tail == -1;
+    }
+
+    @Override
+    public boolean isFull() {
+        return this.tail == array.length - 1;
+    }
+
+    private void shiftLeft() {
+        this.tail--;
+        for (int index = ZERO; index <= this.tail; index++) {
+            this.array[index] = this.array[index + 1];
+        }
+    }
+
+    @Override
+    public void enqueue(T element) throws QueueOverflowException {
+        if (this.isFull()) {
+            throw new QueueOverflowException();
+        } else if (element != null) {
+            this.array[++this.tail] = element;
+        }
+    }
+
+    @Override
+    public T dequeue() throws QueueUnderflowException {
+        if (this.isEmpty()) {
+            throw new QueueUnderflowException();
+        } else {
+            T element = this.head();
+            this.shiftLeft();
+            return element;
+        }
+    }
 
 
 }
