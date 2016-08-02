@@ -7,7 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sorting.AbstractSorting;
+import sorting.extraSortings.RadixSort;
 import sorting.linearSorting.CountingSort;
+import sorting.oddEvenBubble.OddEvenBubbleSort;
 
 public class StudentSortingTest {
 
@@ -35,7 +37,7 @@ public class StudentSortingTest {
 	 */
 	private void getImplementation() {
 		//TODO O aluno deve instanciar sua implementação abaixo ao invés de null 
-		this.implementation = new CountingSort();
+		this.implementation = new RadixSort();
 //		Assert.fail("Implementation not provided");
 	}
 
