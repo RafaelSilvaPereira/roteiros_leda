@@ -1,15 +1,14 @@
 package adt.linkedList;
 
 public class DoubleLinkedListNode<T> extends SingleLinkedListNode<T> {
-	
-	private DoubleLinkedListNode<T> previous;
+	protected DoubleLinkedListNode<T> previous;
 
 	public DoubleLinkedListNode() {
 	}
 
 	public DoubleLinkedListNode(T data, DoubleLinkedListNode<T> next, DoubleLinkedListNode<T> previous) {
 		super(data, next);
-		this.setPrevious(previous);
+		this.previous = previous;
 	}
 
 	public DoubleLinkedListNode<T> getPrevious() {
@@ -19,4 +18,6 @@ public class DoubleLinkedListNode<T> extends SingleLinkedListNode<T> {
 	public void setPrevious(DoubleLinkedListNode<T> previous) {
 		this.previous = previous;
 	}
+	
+	
 }

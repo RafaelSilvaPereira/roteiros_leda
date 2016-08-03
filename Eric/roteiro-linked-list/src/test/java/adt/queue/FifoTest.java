@@ -1,4 +1,4 @@
-package adt.queueDoubleLinked;
+package adt.queue;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

@@ -5,11 +5,16 @@ import adt.linkedList.DoubleLinkedListImpl;
 
 public class QueueDoubleLinkedListImpl<T> implements Queue<T> {
 
+	private static final int ZERO = 0;
+
+	private final int SIZE;
+
 	protected DoubleLinkedList<T> list;
-	protected int size;
 
 	public QueueDoubleLinkedListImpl(int size) {
-		this.size = size;
+		if (size < ZERO)
+			size = ZERO;
+		this.SIZE = size;
 		this.list = new DoubleLinkedListImpl<>();
 	}
 
@@ -34,18 +39,18 @@ public class QueueDoubleLinkedListImpl<T> implements Queue<T> {
 		T element = null;
 		if (!isEmpty()) {
 			T[] eles = list.toArray();
-			element = eles[0];
+			element = eles[ZERO];
 		}
 		return element;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return this.list.size() == 0;
+		return this.list.isEmpty();
 	}
 
 	@Override
 	public boolean isFull() {
-		return this.size == list.size();
+		return this.SIZE == list.size();
 	}
 }

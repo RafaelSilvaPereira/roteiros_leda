@@ -2,12 +2,16 @@ package adt.linkedList;
 
 public class SingleLinkedListImpl<T> implements LinkedList<T> {
 
+	protected static final int ZERO = 0;
+	
+	protected static final int ONE = 1;
+
 	protected SingleLinkedListNode<T> head;
 
 	protected int size;
 
 	public SingleLinkedListImpl() {
-		this.size = 0;
+		this.size = ZERO;
 		this.head = null;
 	}
 
@@ -24,7 +28,7 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 	@Override
 	public T search(T element) {
 		T result = null;
-		if (!isEmpty()) {
+		if (!isEmpty() && element != null) {
 			SingleLinkedListNode<T> aux = head;
 			while (aux.getNext() != null && !aux.getData().equals(element)) {
 				aux = aux.getNext();
@@ -38,25 +42,27 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 
 	@Override
 	public void insert(T element) {
-		SingleLinkedListNode<T> newElement = new SingleLinkedListNode<>(element, null);
-		if (isEmpty()) {
-			head = newElement;
-		} else {
-			SingleLinkedListNode<T> aux = head;
-			while (aux.getNext() != null)
-				aux = aux.getNext();
-			aux.setNext(newElement);
+		if (element != null) {
+			SingleLinkedListNode<T> newElement = new SingleLinkedListNode<>(element, null);
+			if (isEmpty()) {
+				head = newElement;
+			} else {
+				SingleLinkedListNode<T> aux = head;
+				while (aux.getNext() != null)
+					aux = aux.getNext();
+				aux.setNext(newElement);
+			}
+			size++;
 		}
-		size++;
 	}
 
 	@Override
 	public void remove(T element) {
-		if (!isEmpty()) {
+		if (!isEmpty() && element != null) {
 			if (head.getData().equals(element)) {
 				head = head.getNext();
 				size--;
-			} else if (size > 1) {
+			} else if (size > ONE) {
 				SingleLinkedListNode<T> frontPointer = head.getNext();
 				SingleLinkedListNode<T> backPointer = head;
 				while (frontPointer.getNext() != null && !frontPointer.getData().equals(element)) {
@@ -76,7 +82,7 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 		@SuppressWarnings("unchecked")
 		T[] array = (T[]) new Object[size];
 		SingleLinkedListNode<T> aux = this.head;
-		for (int index = 0; aux != null; index++) {
+		for (int index = ZERO; aux != null; index++) {
 			array[index] = aux.getData();
 			aux = aux.getNext();
 		}
