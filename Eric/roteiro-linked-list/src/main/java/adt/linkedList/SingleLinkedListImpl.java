@@ -8,10 +8,7 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 
 	protected SingleLinkedListNode<T> head;
 
-	protected int size;
-
 	public SingleLinkedListImpl() {
-		this.size = ZERO;
 		this.head = null;
 	}
 
@@ -22,7 +19,13 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 
 	@Override
 	public int size() {
-		return this.size;
+		int size = 0;
+		SingleLinkedListNode<T> aux = head;
+		while (aux != null) {
+			size++;
+			aux = aux.getNext();			
+		}
+		return size;
 	}
 
 	@Override
@@ -52,7 +55,6 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 					aux = aux.getNext();
 				aux.setNext(newElement);
 			}
-			size++;
 		}
 	}
 
@@ -61,8 +63,7 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 		if (!isEmpty() && element != null) {
 			if (head.getData().equals(element)) {
 				head = head.getNext();
-				size--;
-			} else if (size > ONE) {
+			} else if (size() > ONE) {
 				SingleLinkedListNode<T> frontPointer = head.getNext();
 				SingleLinkedListNode<T> backPointer = head;
 				while (frontPointer.getNext() != null && !frontPointer.getData().equals(element)) {
@@ -71,7 +72,6 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 				}
 				if (frontPointer.getData().equals(element)) {
 					backPointer.setNext(frontPointer.getNext());
-					size--;
 				}
 			}
 		}
@@ -80,7 +80,7 @@ public class SingleLinkedListImpl<T> implements LinkedList<T> {
 	@Override
 	public T[] toArray() {
 		@SuppressWarnings("unchecked")
-		T[] array = (T[]) new Object[size];
+		T[] array = (T[]) new Object[size()];
 		SingleLinkedListNode<T> aux = this.head;
 		for (int index = ZERO; aux != null; index++) {
 			array[index] = aux.getData();
