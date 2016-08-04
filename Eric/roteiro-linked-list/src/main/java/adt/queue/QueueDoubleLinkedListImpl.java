@@ -37,10 +37,8 @@ public class QueueDoubleLinkedListImpl<T> implements Queue<T> {
 	@Override
 	public T head() {
 		T element = null;
-		if (!isEmpty()) {
-			T[] eles = list.toArray();
-			element = eles[ZERO];
-		}
+		if (!isEmpty())
+			element = ((DoubleLinkedListImpl<T>) list).getHead().getData();
 		return element;
 	}
 

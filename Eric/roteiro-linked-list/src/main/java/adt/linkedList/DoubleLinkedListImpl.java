@@ -5,6 +5,29 @@ public class DoubleLinkedListImpl<T> extends SingleLinkedListImpl<T> implements 
 	protected DoubleLinkedListNode<T> last;
 
 	@Override
+	public void remove(T element) {
+		if (!isEmpty() && element != null) {
+			if (head.getData().equals(element)) {
+				head = head.getNext();
+			} else if (size() > ONE) {
+				SingleLinkedListNode<T> aux = head.getNext();
+				while (aux.getNext() != null && !aux.getData().equals(element))
+					aux = aux.getNext();
+				
+				if (aux.getData().equals(element)) {
+					DoubleLinkedListNode<T> toRemove = (DoubleLinkedListNode<T>) aux,
+											previous = toRemove.getPrevious(),
+											next = (DoubleLinkedListNode<T>)toRemove.getNext();
+					if (next != null)
+						next.setPrevious(previous);
+					// we don't need to check because it'll be the second at least
+					previous.setNext(next);
+				}
+			}
+		}
+	}
+
+	@Override
 	public void insert(T element) {
 		if (element != null) {
 			DoubleLinkedListNode<T> newElem = new DoubleLinkedListNode<>(element, null, last);

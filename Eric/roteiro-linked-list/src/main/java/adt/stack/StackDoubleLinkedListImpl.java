@@ -38,7 +38,7 @@ public class StackDoubleLinkedListImpl<T> implements Stack<T> {
 	public T top() {
 		T element = null;
 		if (!isEmpty())
-			element = this.list.toArray()[ZERO];
+			element = ((DoubleLinkedListImpl<T>) list).getHead().getData();
 		return element;
 	}
 
