@@ -35,26 +35,36 @@ public class RecursiveSingleLinkedListImpl<T> implements LinkedList<T> {
 
 	@Override
 	public T search(T element) {
-		return this.searchNode(element).getData();
+		T searchResult = null;
+		if (isEmpty() || this.data.equals(element)) {
+			searchResult = this.data;
+		} else {
+			searchResult = this.next.search(element);
+		}
+		return searchResult;
 	}
 
 	@Override
 	public void insert(T element) {
 		if (element != null) {
-			// This search will return the last node of the list
-			RecursiveSingleLinkedListImpl<T> lastNode = this.searchNode(null);
-			lastNode.setData(element);
-			lastNode.setNext(new RecursiveSingleLinkedListImpl<T>());
+			if (isEmpty()) {
+				this.data = element;
+				this.next = new RecursiveDoubleLinkedListImpl<>();
+			} else {
+				this.next.insert(element);
+			}
 		}
 	}
 
 	@Override
 	public void remove(T element) {
-		RecursiveSingleLinkedListImpl<T> node = this.searchNode(element);
-		if (!node.isEmpty()) {
-			// If the node isn't already the last it'll have a next one
-			node.setData(node.getNext().getData());
-			node.setNext(node.getNext().getNext());
+		if (!isEmpty()) {
+			if (this.data.equals(element)) {
+				this.data = this.next.getData();
+				this.next = this.next.getNext();
+			} else {
+				this.next.remove(element);
+			}
 		}
 	}
 
@@ -72,21 +82,6 @@ public class RecursiveSingleLinkedListImpl<T> implements LinkedList<T> {
 				thisArray[pointer] = subArray[pointer - ONE];
 		}
 		return thisArray;
-	}
-
-	/**
-	 * Search and return the node with specific data. If no node with the data
-	 * is found it returns an empty node, which is the last node of the list.
-	 */
-	protected final RecursiveSingleLinkedListImpl<T> searchNode(T element) {
-		RecursiveSingleLinkedListImpl<T> searchResult = null;
-		// Return will be the last node or the node with data
-		if (isEmpty() || this.data.equals(element)) {
-			searchResult = this;
-		} else {
-			searchResult = this.next.searchNode(element);
-		}
-		return searchResult;
 	}
 
 	public T getData() {

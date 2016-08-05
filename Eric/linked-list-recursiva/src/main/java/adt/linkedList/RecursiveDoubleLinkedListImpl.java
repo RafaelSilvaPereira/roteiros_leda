@@ -16,23 +16,21 @@ public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListI
 	@Override
 	public void insert(T element) {
 		if (element != null) {
-			RecursiveDoubleLinkedListImpl<T> lastNode = (RecursiveDoubleLinkedListImpl<T>) super.searchNode(null);
-			lastNode.setData(element);
-			RecursiveDoubleLinkedListImpl<T> newLast = new RecursiveDoubleLinkedListImpl<T>();
-			newLast.setPrevious(lastNode);
-			lastNode.setNext(newLast);
+			if (isEmpty()) {
+				this.data = element;
+				this.next = new RecursiveDoubleLinkedListImpl<T>();
+			} else {
+				((RecursiveDoubleLinkedListImpl<T>) this.next).insert(element);
+			}
 		}
 	}
 
 	@Override
 	public void insertFirst(T element) {
 		if (element != null) {
-			RecursiveDoubleLinkedListImpl<T> newSecond = new RecursiveDoubleLinkedListImpl<T>();
-			newSecond.setData(this.data);
-			newSecond.setNext(this.next);
-			newSecond.setPrevious(this);
+			RecursiveDoubleLinkedListImpl<T> second = new RecursiveDoubleLinkedListImpl<>(this.data, this.next, this);
+			this.next = second;
 			this.data = element;
-			this.next = newSecond;
 		}
 	}
 
@@ -51,11 +49,13 @@ public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListI
 
 	@Override
 	public void removeLast() {
-		RecursiveDoubleLinkedListImpl<T> lastNode = (RecursiveDoubleLinkedListImpl<T>) super.searchNode(null);
-		lastNode = lastNode.getPrevious();
-		if (lastNode != null) {
-			lastNode.setData(null);
-			lastNode.setNext(null);
+		if (this.next != null) {
+			if (this.next.isEmpty()) {
+				this.data = null;
+				this.next = null;
+			} else {
+				((RecursiveDoubleLinkedListImpl<T>) this.next).removeLast();
+			}
 		}
 	}
 
