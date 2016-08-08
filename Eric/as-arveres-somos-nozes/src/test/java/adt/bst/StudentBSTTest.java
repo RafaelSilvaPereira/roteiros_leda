@@ -1,10 +1,10 @@
 package adt.bst;
+
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import adt.bst.BSTImpl;
 import adt.bt.BTNode;
 
 public class StudentBSTTest {

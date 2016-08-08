@@ -19,20 +19,17 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public int height() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not implemented yet!");
+		return root.getThisHeight();
 	}
 
 	@Override
 	public BSTNode<T> search(T element) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not implemented yet!");
+		return root.search(element);
 	}
 
 	@Override
 	public void insert(T element) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not implemented yet!");
+		root.add(element);
 	}
 
 	@Override
