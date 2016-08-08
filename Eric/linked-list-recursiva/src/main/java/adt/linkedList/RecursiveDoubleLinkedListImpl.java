@@ -17,10 +17,10 @@ public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListI
 	public void insert(T element) {
 		if (element != null) {
 			if (isEmpty()) {
-				this.data = element;
-				this.next = new RecursiveDoubleLinkedListImpl<T>();
+				this.setData(element);
+				this.setNext(new RecursiveDoubleLinkedListImpl<T>());
 			} else {
-				((RecursiveDoubleLinkedListImpl<T>) this.next).insert(element);
+				this.getNext().insert(element);
 			}
 		}
 	}
@@ -28,35 +28,41 @@ public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListI
 	@Override
 	public void insertFirst(T element) {
 		if (element != null) {
-			RecursiveDoubleLinkedListImpl<T> second = new RecursiveDoubleLinkedListImpl<>(this.data, this.next, this);
-			this.next = second;
-			this.data = element;
+			RecursiveDoubleLinkedListImpl<T> second = new RecursiveDoubleLinkedListImpl<>(this.getData(),
+					this.getNext(), this);
+			this.setNext(second);
+			this.setData(element);
 		}
 	}
 
 	@Override
 	public void removeFirst() {
 		if (!isEmpty()) {
-			RecursiveDoubleLinkedListImpl<T> second = (RecursiveDoubleLinkedListImpl<T>) this.next;
-			this.data = second.getData();
-			this.next = second.getNext();
+			RecursiveDoubleLinkedListImpl<T> second = this.getNext();
+			this.setData(second.getData());
+			this.setNext(second.getNext());
 			if (second.getNext() != null) {
-				RecursiveDoubleLinkedListImpl<T> third = (RecursiveDoubleLinkedListImpl<T>) second.getNext();
-				third.setPrevious(null);
+				RecursiveDoubleLinkedListImpl<T> third = second.getNext();
+				third.setPrevious(this);
 			}
 		}
 	}
 
 	@Override
 	public void removeLast() {
-		if (this.next != null) {
-			if (this.next.isEmpty()) {
-				this.data = null;
-				this.next = null;
+		if (this.getNext() != null) {
+			if (this.getNext().isEmpty()) {
+				this.setData(null);
+				this.setNext(null);
 			} else {
-				((RecursiveDoubleLinkedListImpl<T>) this.next).removeLast();
+				this.getNext().removeLast();
 			}
 		}
+	}
+
+	@Override
+	public RecursiveDoubleLinkedListImpl<T> getNext() {
+		return (RecursiveDoubleLinkedListImpl<T>) super.getNext();
 	}
 
 	public RecursiveDoubleLinkedListImpl<T> getPrevious() {
