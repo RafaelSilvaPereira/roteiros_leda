@@ -25,21 +25,22 @@ public class RecursiveSingleLinkedListImpl<T> implements LinkedList<T> {
 
 	@Override
 	public int size() {
-		int inFront = 0;
-		if (!isEmpty())
-			inFront++;
-		if (this.next != null)
-			inFront += this.next.size();
+		int inFront = ZERO;
+		if (!isEmpty()) {
+			inFront = ONE + this.next.size();
+		}
 		return inFront;
 	}
 
 	@Override
 	public T search(T element) {
 		T searchResult = null;
-		if (isEmpty() || this.data.equals(element)) {
-			searchResult = this.data;
-		} else {
-			searchResult = this.next.search(element);
+		if (element != null && !isEmpty()) {
+			if (this.data.equals(element)) {
+				searchResult = this.data;
+			} else {
+				searchResult = this.next.search(element);
+			}
 		}
 		return searchResult;
 	}
@@ -58,7 +59,7 @@ public class RecursiveSingleLinkedListImpl<T> implements LinkedList<T> {
 
 	@Override
 	public void remove(T element) {
-		if (!isEmpty()) {
+		if (!isEmpty() && element != null) {
 			if (this.data.equals(element)) {
 				this.data = this.next.getData();
 				this.next = this.next.getNext();
@@ -73,7 +74,7 @@ public class RecursiveSingleLinkedListImpl<T> implements LinkedList<T> {
 	public T[] toArray() {
 		T[] thisArray = (T[]) new Object[ZERO];
 		// well, i think it's supposed to work and be beautiful, not to be
-		// efficient
+		// efficient. Top-down strategy.
 		if (!isEmpty()) {
 			T[] subArray = this.next.toArray();
 			thisArray = (T[]) new Object[ONE + subArray.length];
