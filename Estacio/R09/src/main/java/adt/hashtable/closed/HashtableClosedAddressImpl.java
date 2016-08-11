@@ -101,14 +101,19 @@ public class HashtableClosedAddressImpl<T> extends
 
     @Override
     public void remove(T element) {
-        int hash = ((HashFunctionClosedAddress) this.hashFunction)
-                .hash(element);
+        if (element != null) {
+            int hash = ((HashFunctionClosedAddress) this.hashFunction)
+                    .hash(element);
 
-        int elementIndex = this.chainIndexOf(element, hash);
+            int elementIndex = this.chainIndexOf(element, hash);
 
-        if (this.containsElement(elementIndex)) {
-            ((LinkedList<T>) this.table[hash]).remove(elementIndex);
-            this.elements--;
+            if (this.containsElement(elementIndex)) {
+                ((LinkedList<T>) this.table[hash]).remove(elementIndex);
+                this.elements--;
+                if (((LinkedList<T>) this.table[hash]).size() > ZERO) {
+                    this.COLLISIONS--;
+                }
+            }
         }
     }
 
@@ -119,6 +124,7 @@ public class HashtableClosedAddressImpl<T> extends
 
     @Override
     public int indexOf(T element) {
+        if (element == null) return INVALID_INDEX;
         int hash = ((HashFunctionClosedAddress) this.hashFunction)
                 .hash(element);
 
@@ -160,6 +166,7 @@ public class HashtableClosedAddressImpl<T> extends
 
     /**
      * Verifies if the element is in the table / chain.
+     *
      * @param chainIndex index of the element in the chain (list of elements with the same hash).
      * @return {@Code true} if the element is in the table / chain.
      */
