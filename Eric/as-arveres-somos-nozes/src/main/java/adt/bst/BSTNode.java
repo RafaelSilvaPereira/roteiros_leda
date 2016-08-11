@@ -35,12 +35,12 @@ public class BSTNode<T extends Comparable<T>> extends BTNode<T> {
 		}
 		return underThis;
 	}
-	
+
 	public BSTNode<T> search(T element) {
 		BSTNode<T> result;
 		if (isEmpty() || getData().equals(element)) {
 			result = this;
-		} else if (getData().compareTo(element) > 0) {
+		} else if (getData().compareTo(element) < 0) {
 			result = getRight().search(element);
 		} else {
 			result = getLeft().search(element);
@@ -56,5 +56,27 @@ public class BSTNode<T extends Comparable<T>> extends BTNode<T> {
 	@Override
 	public BSTNode<T> getLeft() {
 		return (BSTNode<T>) super.getLeft();
+	}
+
+	public BSTNode<T> maximum() {
+		BSTNode<T> result = null;
+		if (!isEmpty()) {
+			result = this;
+		}
+		if (result != null && !getRight().isEmpty()) {
+			result = getRight().maximum();
+		}
+		return result;
+	}
+
+	public BSTNode<T> minimum() {
+		BSTNode<T> result = null;
+		if (!isEmpty()) {
+			result = this;
+		}
+		if (result != null && !getLeft().isEmpty()) {
+			result = getLeft().minimum();
+		}
+		return result;
 	}
 }

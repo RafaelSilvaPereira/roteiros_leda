@@ -19,7 +19,8 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public int height() {
-		return root.getThisHeight();
+		int height  = root.getThisHeight();
+		return height == 0 ? -1 : height;
 	}
 
 	@Override
@@ -34,14 +35,12 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public BSTNode<T> maximum() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not implemented yet!");
+		return root.maximum();
 	}
 
 	@Override
 	public BSTNode<T> minimum() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not implemented yet!");
+		return root.minimum();
 	}
 
 	@Override
@@ -58,8 +57,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public void remove(T element) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not implemented yet!");
+//		root.remove(element);
 	}
 
 	@Override
