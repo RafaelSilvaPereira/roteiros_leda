@@ -57,7 +57,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public void remove(T element) {
-//		root.remove(element);
+		root.remove(element);
 	}
 
 	@Override

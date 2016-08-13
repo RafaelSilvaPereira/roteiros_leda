@@ -79,4 +79,27 @@ public class BSTNode<T extends Comparable<T>> extends BTNode<T> {
 		}
 		return result;
 	}
+
+	public void remove(T element) {
+		if (!this.isEmpty()) {
+			int compareResult = this.data.compareTo(element);
+			if (compareResult < 0) {
+				this.getRight().remove(element);
+			} else if (compareResult > 0) {
+				this.getLeft().remove(element);
+			} else {
+				BSTNode<T> thisNewValue = getRight().minimum();
+				BSTNode<T> parentOfRemoved = thisNewValue.getParent();
+				BSTNode<T> child = thisNewValue.getRight();
+				this.data = thisNewValue.getData();
+				parentOfRemoved.setLeft(child);
+				child.setParent(parentOfRemoved);
+			}
+		}
+	}
+	
+	@Override
+	public BSTNode<T> getParent() {
+		return (BSTNode<T>) super.getParent();
+	}
 }
