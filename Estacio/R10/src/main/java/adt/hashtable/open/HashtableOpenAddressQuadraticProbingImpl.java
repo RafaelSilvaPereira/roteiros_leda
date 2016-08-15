@@ -89,13 +89,14 @@ public class HashtableOpenAddressQuadraticProbingImpl<T extends Storable>
      */
     private int getNumberOfCollisions(T element, int index) {
         int collisions = 0;
-        int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, collisions);
+        if (this.containsElement(index)) {
+            int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, collisions);
 
-        while (hash != index) {
-            collisions++;
-            hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, collisions);
+            while (hash != index) {
+                collisions++;
+                hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, collisions);
+            }
         }
-
         return collisions;
     }
 
