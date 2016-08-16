@@ -18,24 +18,26 @@ public class HashtableOpenAddressQuadraticProbingImpl<T extends Storable>
 
     @Override
     public void insert(T element) {
-        if (element != null && !isFull()) {
-            int probe = this.probeOf(element);
-            if(this.containsElement(probe)){
-                int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, probe);
-                this.table[hash] = element;
-            }else {
-                probe = ZERO;
-                int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, probe);
-                while (!canPutElement(hash, element)) {
-                    hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, ++probe);
-                    this.COLLISIONS++;
-                }
+        if (element != null) {
+            if (!isFull()) {
+                int probe = this.probeOf(element);
+                if (this.containsElement(probe)) {
+                    int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, probe);
+                    this.table[hash] = element;
+                } else {
+                    probe = ZERO;
+                    int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, probe);
+                    while (!canPutElement(hash, element)) {
+                        hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, ++probe);
+                        this.COLLISIONS++;
+                    }
 
-                this.table[hash] = element;
-                this.elements++;
+                    this.table[hash] = element;
+                    this.elements++;
+                }
+            } else {
+                throw new HashtableOverflowException();
             }
-        } else if (isFull()) {
-            throw new HashtableOverflowException();
         }
     }
 
@@ -102,7 +104,7 @@ public class HashtableOpenAddressQuadraticProbingImpl<T extends Storable>
     /**
      * Verifies if the element can be put in a position of the table.
      *
-     * @param hash Hash of the element.
+     * @param hash    Hash of the element.
      * @param element Element to be put.
      * @return {@code true} if the element can be put, {@code false} otherwise.
      */
