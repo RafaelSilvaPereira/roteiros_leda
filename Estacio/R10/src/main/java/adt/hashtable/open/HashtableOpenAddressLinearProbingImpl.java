@@ -19,15 +19,22 @@ public class HashtableOpenAddressLinearProbingImpl<T extends Storable> extends
     @Override
     public void insert(T element) {
         if (element != null && !isFull()) {
-            int probe = ZERO;
-            int hash = ((HashFunctionLinearProbing) this.hashFunction).hash(element, probe);
-            while (!canPutElement(hash)) {
-                hash = ((HashFunctionLinearProbing) this.hashFunction).hash(element, ++probe);
-                this.COLLISIONS++;
-            }
+            int probe = this.probeOf(element);
 
-            this.table[hash] = element;
-            this.elements++;
+            if(this.containsElement(probe)){
+                int hash = ((HashFunctionLinearProbing) this.hashFunction).hash(element, probe);
+                this.table[hash] = element;
+            }else {
+                probe = ZERO;
+                int hash = ((HashFunctionLinearProbing) this.hashFunction).hash(element, probe);
+                while (!canPutElement(hash, element)) {
+                    hash = ((HashFunctionLinearProbing) this.hashFunction).hash(element, ++probe);
+                    this.COLLISIONS++;
+                }
+
+                this.table[hash] = element;
+                this.elements++;
+            }
         } else if (isFull()) {
             throw new HashtableOverflowException();
         }
@@ -83,12 +90,12 @@ public class HashtableOpenAddressLinearProbingImpl<T extends Storable> extends
 
             while (!resetedProbe(element, probe)
                     && this.table[hash] != null
-                    && !this.table[hash].equals(element)) {
+                    && this.table[hash].hashCode() != element.hashCode()) {
                 hash = ((HashFunctionLinearProbing) this.hashFunction).hash(element, ++probe);
             }
 
             return (!resetedProbe(element, probe) && this.table[hash] != null
-                    && this.table[hash].equals(element)) ? probe : INVALID_INDEX;
+                    && this.table[hash].hashCode() == element.hashCode()) ? probe : INVALID_INDEX;
         } else {
             return INVALID_INDEX;
         }
@@ -98,11 +105,13 @@ public class HashtableOpenAddressLinearProbingImpl<T extends Storable> extends
      * Verifies if the element can be put in a position of the table.
      *
      * @param hash Hash of the element.
+     * @param element Element to be put.
      * @return {@code true} if the element can be put, {@code false} otherwise.
      */
-    private boolean canPutElement(int hash) {
+    private boolean canPutElement(int hash, T element) {
         return this.table[hash] == null
-                || this.table[hash].equals(deletedElement);
+                || this.table[hash].equals(deletedElement)
+                || this.table[hash].hashCode() == element.hashCode();
     }
 
     /**

@@ -19,15 +19,21 @@ public class HashtableOpenAddressQuadraticProbingImpl<T extends Storable>
     @Override
     public void insert(T element) {
         if (element != null && !isFull()) {
-            int probe = ZERO;
-            int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, probe);
-            while (!canPutElement(hash)) {
-                hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, ++probe);
-                this.COLLISIONS++;
-            }
+            int probe = this.probeOf(element);
+            if(this.containsElement(probe)){
+                int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, probe);
+                this.table[hash] = element;
+            }else {
+                probe = ZERO;
+                int hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, probe);
+                while (!canPutElement(hash, element)) {
+                    hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, ++probe);
+                    this.COLLISIONS++;
+                }
 
-            this.table[hash] = element;
-            this.elements++;
+                this.table[hash] = element;
+                this.elements++;
+            }
         } else if (isFull()) {
             throw new HashtableOverflowException();
         }
@@ -82,12 +88,12 @@ public class HashtableOpenAddressQuadraticProbingImpl<T extends Storable>
 
             while (!resetedProbe(element, probe)
                     && this.table[hash] != null
-                    && !this.table[hash].equals(element)) {
+                    && this.table[hash].hashCode() != element.hashCode()) {
                 hash = ((HashFunctionQuadraticProbing) this.hashFunction).hash(element, ++probe);
             }
 
             return (!resetedProbe(element, probe) && this.table[hash] != null
-                    && this.table[hash].equals(element)) ? probe : INVALID_INDEX;
+                    && this.table[hash].hashCode() == element.hashCode()) ? probe : INVALID_INDEX;
         } else {
             return INVALID_INDEX;
         }
@@ -97,11 +103,13 @@ public class HashtableOpenAddressQuadraticProbingImpl<T extends Storable>
      * Verifies if the element can be put in a position of the table.
      *
      * @param hash Hash of the element.
+     * @param element Element to be put.
      * @return {@code true} if the element can be put, {@code false} otherwise.
      */
-    private boolean canPutElement(int hash) {
+    private boolean canPutElement(int hash, T element) {
         return this.table[hash] == null
-                || this.table[hash].equals(deletedElement);
+                || this.table[hash].equals(deletedElement)
+                || this.table[hash].hashCode() == element.hashCode();
     }
 
     /**

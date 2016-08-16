@@ -49,6 +49,11 @@ public class StudentTestHashtableOpenAddressQuadraticProbing {
 		assertEquals(4, table1.getCOLLISIONS());
 		assertEquals(9, table1.indexOf(new HashtableElement(21)));
 
+		table1.insert(new HashtableElement(21)); // tem 1 colisao. coloca no
+		// slot indexado com 9
+		assertEquals(4, table1.getCOLLISIONS());
+		assertEquals(9, table1.indexOf(new HashtableElement(21)));
+
 	}
 
 	@Test
