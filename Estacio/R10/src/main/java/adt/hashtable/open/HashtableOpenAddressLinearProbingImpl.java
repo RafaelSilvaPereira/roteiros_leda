@@ -36,11 +36,11 @@ public class HashtableOpenAddressLinearProbingImpl<T extends Storable> extends
     @Override
     public void remove(T element) {
         if (element != null && !isEmpty()) {
-            int index = this.indexOf(element);
-            if (this.containsElement(index)) {
+            int probe = this.probeOf(element);
+            int index = this.indexOf(element, probe);
 
-                int hash = ((HashFunctionLinearProbing) this.hashFunction).hash(element, ZERO);
-                this.COLLISIONS -= Math.abs(index - hash);
+            if (this.containsElement(index)) {
+                this.COLLISIONS -= probe;
                 this.table[index] = deletedElement;
                 this.elements--;
             }
@@ -54,6 +54,29 @@ public class HashtableOpenAddressLinearProbingImpl<T extends Storable> extends
 
     @Override
     public int indexOf(T element) {
+        int probe = this.probeOf(element);
+        return this.indexOf(element, probe);
+    }
+
+    /**
+     * Returns the index of an element in the table given it's probe too.
+     *
+     * @param element Element to be searched in the table.
+     * @param probe   Probe of the element.
+     * @return The index of the element in the table.
+     */
+    private int indexOf(T element, int probe) {
+        return (probe == INVALID_INDEX) ? INVALID_INDEX :
+                ((HashFunctionLinearProbing) this.hashFunction).hash(element, probe);
+    }
+
+    /**
+     * Returns the probe value of an element in the table.
+     *
+     * @param element Element in the table.
+     * @return Probe value of the element.
+     */
+    private int probeOf(T element) {
         if (element != null && !isEmpty()) {
             int probe = ZERO;
             int hash = ((HashFunctionLinearProbing) this.hashFunction).hash(element, probe);
@@ -65,7 +88,7 @@ public class HashtableOpenAddressLinearProbingImpl<T extends Storable> extends
             }
 
             return (!resetedProbe(element, probe) && this.table[hash] != null
-                    && this.table[hash].equals(element)) ? hash : INVALID_INDEX;
+                    && this.table[hash].equals(element)) ? probe : INVALID_INDEX;
         } else {
             return INVALID_INDEX;
         }

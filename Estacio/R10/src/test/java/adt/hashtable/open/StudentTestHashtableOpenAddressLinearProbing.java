@@ -6,9 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import adt.hashtable.hashfunction.HashFunctionClosedAddressMethod;
-import adt.hashtable.open.AbstractHashtableOpenAddress;
-import adt.hashtable.open.HashtableElement;
-import adt.hashtable.open.HashtableOpenAddressLinearProbingImpl;
 
 public class StudentTestHashtableOpenAddressLinearProbing {
 
@@ -35,26 +32,41 @@ public class StudentTestHashtableOpenAddressLinearProbing {
 	public void testInsert() {
 		assertEquals(0, table1.getCOLLISIONS());
 		table1.insert(new HashtableElement(7)); // nao produz colisao. coloca no
-												// slot indexado com 7
+		// slot indexado com 7
 		assertEquals(7, table1.indexOf(new HashtableElement(7)));
 		assertEquals(0, table1.getCOLLISIONS());
 
 		table1.insert(new HashtableElement(9)); // nao produz colisao. coloca no
-												// slot indexado com 9
+		// slot indexado com 9
 		assertEquals(9, table1.indexOf(new HashtableElement(9)));
 		assertEquals(0, table1.getCOLLISIONS());
 
 		table1.insert(new HashtableElement(12)); // produz colisao com o 2.
-													// coloca no slot indexado
-													// com 6 (prox disponivel)
+		// coloca no slot indexado
+		// com 6 (prox disponivel)
 		assertEquals(6, table1.indexOf(new HashtableElement(12)));
 		assertEquals(4, table1.getCOLLISIONS());
-
-		table1.remove(new HashtableElement(12)); // Zerar colisões
+		table1.remove(new HashtableElement(12));
 		assertEquals(0, table1.getCOLLISIONS());
 
+		assertEquals(6, table1.size());
+		table1.remove(new HashtableElement(9));
+		assertEquals(5, table1.size());
+		table1.remove(new HashtableElement(7));
+		assertEquals(4, table1.size());
+		table1.remove(new HashtableElement(5));
+		assertEquals(3, table1.size());
+		table1.remove(new HashtableElement(4));
+		assertEquals(2, table1.size());
+		table1.remove(new HashtableElement(3));
+		assertEquals(1, table1.size());
+		table1.remove(new HashtableElement(2));
+		assertEquals(0, table1.size());
+
+		assertTrue(table1.isEmpty());
+
 		table2.insert(new HashtableElement(14)); // nao produz colisao. coloca
-													// no slot indexado com 4
+		// no slot indexado com 4
 		assertEquals(4, table2.indexOf(new HashtableElement(14)));
 		assertEquals(0, table2.getCOLLISIONS());
 
@@ -65,6 +77,14 @@ public class StudentTestHashtableOpenAddressLinearProbing {
 		table1.remove(new HashtableElement(12)); // elemento inexistente
 		assertEquals(4, table1.size());
 
+		table1.insert(new HashtableElement(12)); // produz colisao com o 2.
+		// coloca no slot indexado
+		// com 6 (prox disponivel)
+
+		assertEquals(4, table1.getCOLLISIONS());
+		table1.remove(new HashtableElement(12)); // Zerar colisões
+		assertEquals(0, table1.getCOLLISIONS());
+
 		table1.remove(new HashtableElement(5)); // elemento existente
 		assertEquals(3, table1.size());
 		assertNull(table1.search(new HashtableElement(5)));
@@ -73,10 +93,23 @@ public class StudentTestHashtableOpenAddressLinearProbing {
 
 	@Test
 	public void testSearch() {
+
+		assertEquals(new HashtableElement(4),
+				table1.search(new HashtableElement(4)));
+
+		assertEquals(new HashtableElement(3),
+				table1.search(new HashtableElement(3)));
+
+		assertEquals(new HashtableElement(2),
+				table1.search(new HashtableElement(2)));
+
+
 		assertEquals(new HashtableElement(5),
 				table1.search(new HashtableElement(5))); // elemento que existe
 		assertNull(table1.search(new HashtableElement(15))); // elemento que nao
-																// existe
+		// existe
+		assertNull(table1.search(new HashtableElement(1)));
+
 	}
 
 	@Test
@@ -108,6 +141,32 @@ public class StudentTestHashtableOpenAddressLinearProbing {
 	@Test
 	public void testSize() {
 		assertEquals(4, table1.size());
+	}
+
+	@Test
+	public void testCollisions(){
+
+		table1.insert(new HashtableElement(1));
+		table1.insert(new HashtableElement(6));
+		table1.insert(new HashtableElement(7));
+		table1.insert(new HashtableElement(8));
+		table1.insert(new HashtableElement(9));
+		table1.insert(new HashtableElement(10));
+		assertEquals(0, table1.getCOLLISIONS());
+		assertTrue(table1.isFull());
+
+		try{
+			table1.insert(new HashtableElement(99));
+			fail();
+		} catch (HashtableOverflowException e){
+			assertEquals(0, table1.getCOLLISIONS());
+		}
+
+		table1.remove(new HashtableElement(10));
+		table1.insert(new HashtableElement(11)); //vai dar colisao com tudo de 1 ate 9
+		assertTrue(table1.isFull());
+		assertEquals(9, table1.getCOLLISIONS());
+
 	}
 
 }
