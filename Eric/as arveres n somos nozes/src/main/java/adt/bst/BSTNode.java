@@ -119,38 +119,12 @@ public class BSTNode<T extends Comparable<T>> extends BTNode<T> {
 		return (BSTNode<T>) super.getParent();
 	}
 
-	public T[] preOrder() {
-		T[] array = (T[]) new Comparable[0];
-		if (!this.isEmpty()) {
-			T[] subLeftArray = getLeft().preOrder();
-			T[] subRightArray = getRight().preOrder();
-			array = (T[]) new Comparable[1 + subLeftArray.length + subRightArray.length];
-			array[0] = this.data;
-			int start = 1;
-			for (int i = start; i < subLeftArray.length + start; i++)
-				array[i] = subLeftArray[i - start];
-			start = subLeftArray.length + 1;
-			for (int i = start; i < subRightArray.length + start; i++)
-				array[i] = subRightArray[i - start];
-
-		}
-		return array;
-	}
-
 	public T[] order() {
 		T[] array = (T[]) new Comparable[0];
 		if (!this.isEmpty()) {
 			T[] subLeftArray = getLeft().order();
 			T[] subRightArray = getRight().order();
-			array = (T[]) new Comparable[1 + subLeftArray.length + subRightArray.length];
-			int start = 0;
-			for (int i = start; i < subLeftArray.length + start; i++)
-				array[i] = subLeftArray[i - start];
-			array[subLeftArray.length] = this.data;
-			start = subLeftArray.length + 1;
-			for (int i = start; i < subRightArray.length + start; i++)
-				array[i] = subRightArray[i - start];
-
+			array = mergeAll(this.data, subLeftArray, subRightArray, true);
 		}
 		return array;
 	}
@@ -160,16 +134,36 @@ public class BSTNode<T extends Comparable<T>> extends BTNode<T> {
 		if (!this.isEmpty()) {
 			T[] subLeftArray = getLeft().postOrder();
 			T[] subRightArray = getRight().postOrder();
-			array = (T[]) new Comparable[1 + subLeftArray.length + subRightArray.length];
-			array[0] = this.data;
-			int start = 1;
-			for (int i = start; i < subRightArray.length + start; i++)
-				array[i] = subRightArray[i - start];
-			start = subRightArray.length + 1;
-			for (int i = start; i < subLeftArray.length + start; i++)
-				array[i] = subLeftArray[i - start];
-
+			array = mergeAll(this.data, subRightArray, subLeftArray, false);
 		}
+		return array;
+	}
+	
+	public T[] preOrder() {
+		T[] array = (T[]) new Comparable[0];
+		if (!this.isEmpty()) {
+			T[] subLeftArray = getLeft().preOrder();
+			T[] subRightArray = getRight().preOrder();
+			array = mergeAll(this.data, subLeftArray, subRightArray, false);
+		}
+		return array;
+	}
+
+	private T[] mergeAll(T element, T[] array1, T[] array2, boolean elemInMiddle) {
+		T[] array = (T[]) new Comparable[1 + array1.length + array2.length];
+		int elemPos = 0;
+		int start = 1;
+		if (elemInMiddle) {
+			elemPos = array1.length;
+			start = 0;
+		}
+		array[elemPos] = this.data;
+		for (int i = start; i < array1.length + start; i++)
+			array[i] = array1[i - start];
+		start = array1.length + 1;
+		for (int i = start; i < array2.length + start; i++)
+			array[i] = array2[i - start];
+
 		return array;
 	}
 
