@@ -40,7 +40,9 @@ public class OrderedDoubleLinkedListImpl<T> extends OrderedSingleLinkedListImpl<
     @Override
     public void insertFirst(T element) {
         if (element != null) {
-            if (this.getComparator().compare(element, this.getHead().getData()) <= EQUAL) {
+            if (isEmpty()) {
+                this.insert(element);
+            } else if (this.getComparator().compare(element, this.getHead().getData()) <= EQUAL) {
                 DoubleLinkedListNode<T> node =
                         new DoubleLinkedListNode<>(element, (DoubleLinkedListNode<T>) this.getHead(),
                                 new DoubleLinkedListNode<T>());
@@ -87,18 +89,18 @@ public class OrderedDoubleLinkedListImpl<T> extends OrderedSingleLinkedListImpl<
                 this.setLast(newNode);
             } else {
                 DoubleLinkedListNode<T> node = (DoubleLinkedListNode<T>) this.getHead();
-                while(!node.getNext().isNIL() && this.getComparator().compare(element, node.getData()) > EQUAL){
+                while (!node.getNext().isNIL() && this.getComparator().compare(element, node.getData()) > EQUAL) {
                     node = (DoubleLinkedListNode<T>) node.getNext();
                 }
 
-                if(node.getPrevious().isNIL()){
+                if (node.getPrevious().isNIL()) {
                     ((DoubleLinkedListNode<T>) this.getHead()).setPrevious(newNode);
                     newNode.setNext(this.getHead());
                     this.setHead(newNode);
-                }else if(node.getNext().isNIL()){
+                } else if (node.getNext().isNIL()) {
                     this.getLast().setNext(newNode);
                     this.setLast(newNode);
-                }else{
+                } else {
                     newNode.setPrevious(node.getPrevious());
                     newNode.setNext(node);
 

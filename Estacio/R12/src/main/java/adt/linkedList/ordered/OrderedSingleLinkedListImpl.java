@@ -25,9 +25,10 @@ public class OrderedSingleLinkedListImpl<T> extends SingleLinkedListImpl<T> impl
     private Comparator<T> comparator;
 
     public OrderedSingleLinkedListImpl() {
-        this.comparator = (a, b) -> (a == null) ? BIGGER : (b == null) ? SMALLER :
-                (a.hashCode() > b.hashCode()) ? BIGGER :
-                        (a.hashCode() == b.hashCode()) ? EQUAL : SMALLER;
+        this.comparator = (a, b) -> (a == null) ? BIGGER :
+                (b == null) ? SMALLER :
+                        (a.hashCode() > b.hashCode()) ? BIGGER :
+                                (a.hashCode() == b.hashCode()) ? EQUAL : SMALLER;
     }
 
     public OrderedSingleLinkedListImpl(Comparator<T> comparator) {
@@ -36,49 +37,37 @@ public class OrderedSingleLinkedListImpl<T> extends SingleLinkedListImpl<T> impl
 
     @Override
     public T minimum() {
-        if (!isEmpty()) {
-            SingleLinkedListNode<T> last = this.getLastNode();
-            return (this.comparator.compare(this.getHead().getData(), last.getData()) < EQUAL) ?
-                    this.getHead().getData() : last.getData();
-        } else {
-            return null;
-        }
+        return (isEmpty()) ? null : this.getHead().getData();
     }
 
     protected SingleLinkedListNode<T> getLastNode() {
         SingleLinkedListNode<T> node;
         for (node = this.getHead();
-             !node.getNext().isNIL(); node = node.getNext())
+             node.isNIL() || !node.getNext().isNIL(); node = node.getNext())
             ;
         return node;
     }
 
     @Override
     public T maximum() {
-        if (!isEmpty()) {
-            SingleLinkedListNode<T> last = this.getLastNode();
-            return (this.comparator.compare(this.getHead().getData(), last.getData()) > EQUAL) ?
-                    this.getHead().getData() : last.getData();
-        } else {
-            return null;
-        }
+        return (isEmpty()) ? null : this.getLastNode().getData();
     }
 
     @Override
     public void insert(T element) {
-        if(isEmpty()){
+        if (isEmpty()) {
             super.insert(element);
-        }else {
+        } else {
             SingleLinkedListNode<T> node = this.getHead();
             SingleLinkedListNode<T> previous = null;
-            while(this.comparator.compare(element, node.getData()) > EQUAL){
+            while (this.comparator.compare(element, node.getData()) > EQUAL) {
                 previous = node;
                 node = node.getNext();
             }
             SingleLinkedListNode<T> newNode = new SingleLinkedListNode<T>(element, node);
-            if(previous == null){
+            if (previous == null) {
                 this.setHead(newNode);
-            }else {
+            } else {
                 previous.setNext(newNode);
             }
         }
@@ -90,5 +79,28 @@ public class OrderedSingleLinkedListImpl<T> extends SingleLinkedListImpl<T> impl
 
     public void setComparator(Comparator<T> comparator) {
         this.comparator = comparator;
+        this.sort();
+    }
+
+    private void sort() {
+        boolean swapped;
+        do {
+            swapped = false;
+            for (SingleLinkedListNode<T> node = this.getHead();
+                 !node.isNIL() && !node.getNext().isNIL();
+                 node = node.getNext()) {
+                if (this.comparator.compare(node.getData(), node.getNext().getData()) > EQUAL) {
+                    this.swap(node, node.getNext());
+                    swapped = true;
+                }
+            }
+
+        } while (swapped);
+    }
+
+    private void swap(SingleLinkedListNode<T> node, SingleLinkedListNode<T> next) {
+        T aux = node.getData();
+        node.setData(next.getData());
+        next.setData(aux);
     }
 }

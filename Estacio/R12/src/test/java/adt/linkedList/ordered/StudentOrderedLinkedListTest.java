@@ -1,5 +1,8 @@
 package adt.linkedList.ordered;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Comparator;
 
 import org.junit.Assert;
@@ -30,6 +33,83 @@ public class StudentOrderedLinkedListTest {
 		lista2 = new OrderedDoubleLinkedListImpl<>();
 	}
 
+	@Test
+	public void testDoubleImpl() {
+
+		OrderedDoubleLinkedListImpl<Integer> list = new OrderedDoubleLinkedListImpl<>((a, b) -> b.compareTo(a));
+		Assert.assertEquals(0, list.size());
+		Assert.assertTrue(list.isEmpty());
+
+		list.insertFirst(1);
+		Assert.assertEquals(1, list.size());
+		Assert.assertFalse(list.isEmpty());
+
+		list.insertFirst(2);
+		Assert.assertEquals(2, list.size());
+		Assert.assertNotNull(list.search(2));
+		Assert.assertNotNull(list.search(1));
+		Assert.assertNull(list.search(0));
+
+		Assert.assertEquals(new Integer(2), list.minimum());
+		Assert.assertEquals(new Integer(1), list.maximum());
+
+		list.insertFirst(3);
+		Assert.assertEquals(3, list.size());
+
+		list.insertFirst(10);
+		Assert.assertEquals(4, list.size());
+
+		list.insertFirst(4);
+		Assert.assertEquals(4, list.size());
+
+		list.removeFirst();
+		Assert.assertEquals(3, list.size());
+
+		list.insertFirst(4);
+		Assert.assertEquals(4, list.size());
+
+		list.removeFirst();
+		Assert.assertEquals(3, list.size());
+
+		list.removeFirst();
+		Assert.assertEquals(2, list.size());
+
+		list.removeFirst();
+		Assert.assertEquals(1, list.size());
+
+		list.removeFirst();
+		Assert.assertEquals(0, list.size());
+
+		list.removeFirst();
+		Assert.assertEquals(0, list.size());
+
+		list.insert(10);
+		list.insert(12);
+		list.insert(14);
+		list.insert(16);
+		list.insert(18);
+		list.insert(20);
+		list.insert(22);
+		list.insert(24);
+
+		Assert.assertEquals(new Integer(24), list.minimum());
+		Assert.assertEquals(new Integer(10), list.maximum());
+		list.removeLast();
+		Assert.assertEquals(new Integer(12), list.maximum());
+		Assert.assertNull(list.search(10));
+
+		list.remove(16);
+		Assert.assertNull(list.search(16));
+
+		Assert.assertEquals(6, list.size());
+
+		Integer[] array = {24, 22, 20, 18, 14, 12};
+		Assert.assertArrayEquals(array, list.toArray());
+		list.setComparator((a, b) -> a.compareTo(b));
+
+		Arrays.sort(array);
+		Assert.assertArrayEquals(array, list.toArray());
+	}
 	@Test
 	public void testIsEmpty() {
 		Assert.assertFalse(lista1.isEmpty());
