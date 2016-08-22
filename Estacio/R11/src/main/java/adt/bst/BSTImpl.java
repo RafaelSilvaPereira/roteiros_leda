@@ -5,6 +5,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
     private static final int ZERO = 0;
     private static final int ONE = 1;
     private static final int MINUS_ONE = -1;
+    private final int EQUALS = 0;
 
     protected BSTNode<T> root;
 
@@ -53,7 +54,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
     private BSTNode<T> search(BSTNode<T> node, T element) {
         if (node.isEmpty() || node.getData().equals(element)) {
             return node;
-        } else if (node.isBiggerThan(element)) {
+        } else if (isBiggerThan(node, element)) {
             return this.search((BSTNode) node.getLeft(), element);
         } else {
             return this.search((BSTNode) node.getRight(), element);
@@ -80,9 +81,9 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
             node.setData(element);
             node.setLeft(new BSTNode<T>());
             node.setRight(new BSTNode<T>());
-        } else if (node.isBiggerThan(element)) {
+        } else if (isBiggerThan(node, element)) {
             this.insert(node, (BSTNode) node.getLeft(), element);
-        } else if (node.isSmallerThan(element)) {
+        } else if (isSmallerThan(node, element)) {
             this.insert(node, (BSTNode) node.getRight(), element);
         }
     }
@@ -148,7 +149,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
             return successor;
         } else {
             successor = (BSTNode) node.getParent();
-            while (successor != null && successor.isSmallerThan(node.getData())) {
+            while (successor != null && isSmallerThan(successor, node.getData())) {
                 successor = (BSTNode) successor.getParent();
             }
             return successor;
@@ -174,7 +175,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
             return predecessor;
         } else {
             predecessor = (BSTNode) node.getParent();
-            while (predecessor != null && predecessor.isBiggerThan(node.getData())) {
+            while (predecessor != null && isBiggerThan(predecessor, node.getData())) {
                 predecessor = (BSTNode) predecessor.getParent();
             }
             return predecessor;
@@ -199,7 +200,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
     private void remove(BSTNode<T> node) {
         if (node.isLeaf()) {
             node.setData(null);
-        } else if (node.isOneDegree()) {
+        } else if (isOneDegree(node)) {
             this.removeOneDegree(node);
         } else {
             this.removeTwoDegree(node);
@@ -229,10 +230,10 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
      */
     private void removeOneDegree(BSTNode<T> node) {
         /* No need to verify if has only the right child */
-        BSTNode<T> child = (node.hasOnlyLeftChild()) ? (BSTNode) node.getLeft() : (BSTNode) node.getRight();
+        BSTNode<T> child = (hasOnlyLeftChild(node)) ? (BSTNode) node.getLeft() : (BSTNode) node.getRight();
 
         if (node.getParent() != null) {
-            if (node.isLeftChild()) {
+            if (isLeftChild(node)) {
                 node.getParent().setLeft(child);
             } else { /* is right child */
                 node.getParent().setRight(child);
@@ -338,4 +339,69 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
         return result;
     }
 
+    // --- NODE METHODS ---
+
+    /**
+     * Verifies if the node has a bigger data than the element.
+     *
+     * @param node    Analysed node.
+     * @param element Element to be analysed.
+     * @return {@code true} if the node data is bigger than the element, {@code false} otherwise.
+     */
+    public boolean isBiggerThan(BSTNode<T> node, T element) {
+        return !node.isEmpty() && element != null && node.getData().compareTo(element) > EQUALS;
+    }
+
+    /**
+     * Verifies if the node has a smaller data than the element.
+     *
+     * @param node    Analysed node.
+     * @param element Element to be analysed.
+     * @return {@code true} if the node data is smaller than the element, {@code false} otherwise.
+     */
+    public boolean isSmallerThan(BSTNode<T> node, T element) {
+        return !node.isEmpty() && element != null && node.getData().compareTo(element) < EQUALS;
+    }
+
+    /**
+     * Verifies if the node has only one child.
+     *
+     * @param node Analysed node.
+     * @return {@code true} if the node has only one child, {@code false} otherwise.
+     */
+    public boolean isOneDegree(BSTNode<T> node) {
+        return this.hasOnlyLeftChild(node) || this.hasOnlyRightChild(node);
+    }
+
+    /**
+     * Verifies if the node has only the left child.
+     *
+     * @param node Analysed node.
+     * @return {@code true} if the node has only the left child, {@code false} otherwise.
+     */
+    public boolean hasOnlyLeftChild(BSTNode<T> node) {
+        return (node.getRight().isEmpty() && !node.getLeft().isEmpty());
+    }
+
+    /**
+     * Verifies if the node has only the right child.
+     *
+     * @param node Analysed node.
+     * @return {@code true} if the node has only the right child, {@code false} otherwise.
+     */
+    public boolean hasOnlyRightChild(BSTNode<T> node) {
+        return (!node.getRight().isEmpty() && node.getLeft().isEmpty());
+    }
+
+    /**
+     * Verifies if the node is the left child of it's parent.
+     *
+     * @param node Analysed node.
+     * @return {@code true} if the node is the left child of it's parent, {@code false} otherwise.
+     */
+    public boolean isLeftChild(BSTNode<T> node) {
+        return !node.getParent().isEmpty()
+                && !node.getParent().getLeft().isEmpty() &&
+                node.getParent().getLeft().getData().equals(node.getData());
+    }
 }
