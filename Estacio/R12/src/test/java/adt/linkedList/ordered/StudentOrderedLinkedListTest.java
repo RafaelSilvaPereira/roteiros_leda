@@ -14,6 +14,9 @@ public class StudentOrderedLinkedListTest {
 	private OrderedLinkedList<Integer> lista1;
 	private OrderedLinkedList<Integer> lista2;
 
+	private static final Comparator<Integer> ASCENDING = (a, b) -> a.compareTo(b);
+	private static final Comparator<Integer> DESCENDING = (a, b) -> b.compareTo(a);
+
 	@Before
 	public void setUp() throws Exception {
 
@@ -36,7 +39,7 @@ public class StudentOrderedLinkedListTest {
 	@Test
 	public void testDoubleImpl() {
 
-		OrderedDoubleLinkedListImpl<Integer> list = new OrderedDoubleLinkedListImpl<>((a, b) -> b.compareTo(a));
+		OrderedDoubleLinkedListImpl<Integer> list = new OrderedDoubleLinkedListImpl<>(DESCENDING);
 		Assert.assertEquals(0, list.size());
 		Assert.assertTrue(list.isEmpty());
 
@@ -105,9 +108,45 @@ public class StudentOrderedLinkedListTest {
 
 		Integer[] array = {24, 22, 20, 18, 14, 12};
 		Assert.assertArrayEquals(array, list.toArray());
-		list.setComparator((a, b) -> a.compareTo(b));
+		list.setComparator(ASCENDING);
 
 		Arrays.sort(array);
+		Assert.assertArrayEquals(array, list.toArray());
+
+		list.insert(null);
+		list.insertFirst(null);
+		list.remove(null);
+		Assert.assertEquals(6, list.size());
+
+		Assert.assertEquals(new Integer(24) ,list.getLastNode().getData());
+		Assert.assertEquals(new Integer(12) ,list.getHead().getData());
+
+		Comparator<Integer> comparator = (a, b) -> {
+			a /= 10;
+			b /= 10;
+			return a.compareTo(b);
+		};
+
+		list.setComparator(comparator);
+		Arrays.sort(array, comparator);
+		Assert.assertArrayEquals(array, list.toArray());
+
+		list.insert(10);
+		list.insertFirst(9);
+		list.insertFirst(8);
+		list.insertFirst(11);
+		list.insert(11);
+		list.insert(11);
+		list.insert(18);
+		list.insert(19);
+		list.insert(20);
+		list.insert(29);
+		list.insert(30);
+		list.insertFirst(null);
+		list.insertFirst(100);
+
+		array = new Integer[]{8, 9, 19, 18, 11, 11, 10, 12, 14, 18, 29, 20, 20, 22, 24, 30};
+		Assert.assertEquals(array.length, list.size());
 		Assert.assertArrayEquals(array, list.toArray());
 	}
 	@Test
