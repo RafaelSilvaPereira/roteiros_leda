@@ -12,8 +12,8 @@ public class DoubleLinkedListImpl<T> extends SingleLinkedListImpl<T> implements 
 	public void insert(T element) {
 		if (!isNull(element)) {
 			if (isEmpty()) {
-				DoubleLinkedListNode<T> newHead = newNode(element, last, getHead());
-				getHead().setNext(newHead);
+				DoubleLinkedListNode<T> newHead = newNode(element, last, null);
+				newHead.setPrevious(newNode(null, newHead, null));
 				setHead(newHead);
 				last.setPrevious(newHead);
 			} else {
@@ -30,13 +30,14 @@ public class DoubleLinkedListImpl<T> extends SingleLinkedListImpl<T> implements 
 		if (!isEmpty() && !isNull(element)) {
 			DoubleLinkedListNode<T> aux = getHead();
 			while (!aux.isNIL() && !equalData(element, aux)) {
-				aux = (DoubleLinkedListNode<T>) aux.getNext();
+				aux = getNext(aux);
 			}
 			if (!aux.isNIL() && equalData(element, aux)) {
-				DoubleLinkedListNode<T> newNext = (DoubleLinkedListNode<T>) aux.getNext();
-				DoubleLinkedListNode<T> newPrev = aux.getPrevious();
-				newPrev.setNext(newNext);
-				newNext.setPrevious(newPrev);
+				DoubleLinkedListNode<T> newNext = getNext(getNext(aux));
+				aux.setData(aux.getNext().getData());
+				aux.setNext(newNext);
+				if (newNext != null)
+					newNext.setPrevious(aux);
 			}
 		}
 	}
@@ -44,8 +45,8 @@ public class DoubleLinkedListImpl<T> extends SingleLinkedListImpl<T> implements 
 	@Override
 	public void insertFirst(T element) {
 		if (!isNull(element)) {
-			DoubleLinkedListNode<T> newHead = newNode(element, getHead(), null);
-			newHead.setPrevious(newNode(null, newHead, null));
+			DoubleLinkedListNode<T> newHead = newNode(element, getHead(), getHead().getPrevious());
+			newHead.getPrevious().setNext(newHead);
 			getHead().setPrevious(newHead);
 			setHead(newHead);
 		}
@@ -66,6 +67,7 @@ public class DoubleLinkedListImpl<T> extends SingleLinkedListImpl<T> implements 
 			DoubleLinkedListNode<T> preLast = last.getPrevious();
 			preLast.setData(null);
 			preLast.setNext(null);
+			last = preLast;
 		}
 	}
 
@@ -84,5 +86,9 @@ public class DoubleLinkedListImpl<T> extends SingleLinkedListImpl<T> implements 
 	@Override
 	public DoubleLinkedListNode<T> getHead() {
 		return (DoubleLinkedListNode<T>) super.getHead();
+	}
+	
+	private DoubleLinkedListNode<T> getNext(DoubleLinkedListNode<T> node) {
+		return (DoubleLinkedListNode<T>) node.getNext();
 	}
 }

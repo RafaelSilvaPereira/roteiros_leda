@@ -25,11 +25,7 @@ public class RecursiveSingleLinkedListImpl<T> implements LinkedList<T> {
 
 	@Override
 	public int size() {
-		int inFront = ZERO;
-		if (!isEmpty()) {
-			inFront = ONE + this.next.size();
-		}
-		return inFront;
+		return (isEmpty()) ? ZERO : ONE + next.size();
 	}
 
 	@Override

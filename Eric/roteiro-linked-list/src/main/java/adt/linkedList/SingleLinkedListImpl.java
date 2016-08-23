@@ -1,5 +1,10 @@
 package adt.linkedList;
 
+/**
+ * Pronto para a prova 
+ * 
+ * @author Eric
+ */
 public class SingleLinkedListImpl<T> implements LinkedList<T> {
 
 	protected static final int ZERO = 0;

@@ -1,5 +1,10 @@
 package adt.linkedList;
 
+/**
+ * Pronto para a prova.
+ * 
+ * @author Eric
+ */
 public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListImpl<T> implements DoubleLinkedList<T> {
 
 	protected RecursiveDoubleLinkedListImpl<T> previous;
@@ -17,10 +22,7 @@ public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListI
 	public void insert(T element) {
 		if (element != null) {
 			if (isEmpty()) {
-				this.setData(element);
-				this.setNext(newNode(null, null, this));
-				if (this.getPrevious() == null)
-					this.setPrevious(newNode(null, this, null));
+				insertFirst(element);
 			} else {
 				this.getNext().insert(element);
 			}
@@ -31,10 +33,7 @@ public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListI
 	public void remove(T element) {
 		if (!isEmpty() && element != null) {
 			if (this.data.equals(element)) {
-				this.data = getNext().getData();
-				this.next = getNext().getNext();
-				if (getNext() != null)
-					getNext().setPrevious(this);
+				removeFirst();
 			} else {
 				this.getNext().remove(element);
 			}
@@ -47,6 +46,8 @@ public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListI
 			RecursiveDoubleLinkedListImpl<T> second = newNode(this.getData(), this.getNext(), this);
 			this.setNext(second);
 			this.setData(element);
+			if (this.getPrevious() == null)
+				this.setPrevious(newNode(null, this, null));
 		}
 	}
 
@@ -54,12 +55,12 @@ public class RecursiveDoubleLinkedListImpl<T> extends RecursiveSingleLinkedListI
 	public void removeFirst() {
 		if (!isEmpty()) {
 			RecursiveDoubleLinkedListImpl<T> second = this.getNext();
-			if (second.getNext() != null) {
-				RecursiveDoubleLinkedListImpl<T> third = second.getNext();
+			RecursiveDoubleLinkedListImpl<T> third = second.getNext();
+			if (third != null) {
 				third.setPrevious(this);
 			}
 			this.setData(second.getData());
-			this.setNext(second.getNext());
+			this.setNext(third);
 		}
 	}
 
