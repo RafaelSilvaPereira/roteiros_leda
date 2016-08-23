@@ -1,7 +1,8 @@
 package adt.bt;
 
 /**
- * The node of a binary tree. Its internal data has type T, which does not need to be comparable. 
+ * The node of a binary tree. Its internal data has type T, which does not need
+ * to be comparable.
  */
 public class BTNode<T> {
 	protected T data;
@@ -15,17 +16,22 @@ public class BTNode<T> {
 		this.right = right;
 		this.parent = parent;
 	}
+
 	public BTNode() {
 	}
-	
-	public boolean isEmpty(){
+
+	public boolean isEmpty() {
 		return this.data == null;
+	}
+
+	public boolean isLeaf() {
+		return this.data != null && this.left.isEmpty() && this.right.isEmpty();
 	}
 	
 	@Override
-	public String toString(){
+	public String toString() {
 		String resp = "NIL";
-		if(!isEmpty()){
+		if (!isEmpty()) {
 			resp = data.toString();
 		}
 		return resp;
@@ -33,18 +39,19 @@ public class BTNode<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean equals(Object obj){
+	public boolean equals(Object obj) {
 		boolean resp = false;
-		if(obj instanceof BTNode){
-			if(!this.isEmpty() && !((BTNode<T>)obj).isEmpty()){
-				resp = 	this.data.equals(((BTNode<T>)obj).data);
-			}else{
-				resp = 	this.isEmpty() && ((BTNode<T>)obj).isEmpty();
+		if (obj instanceof BTNode) {
+			if (!this.isEmpty() && !((BTNode<T>) obj).isEmpty()) {
+				resp = this.data.equals(((BTNode<T>) obj).data);
+			} else {
+				resp = this.isEmpty() && ((BTNode<T>) obj).isEmpty();
 			}
-			
+
 		}
 		return resp;
 	}
+
 	public T getData() {
 		return data;
 	}
@@ -76,4 +83,5 @@ public class BTNode<T> {
 	public void setParent(BTNode<T> parent) {
 		this.parent = parent;
 	}
+
 }
