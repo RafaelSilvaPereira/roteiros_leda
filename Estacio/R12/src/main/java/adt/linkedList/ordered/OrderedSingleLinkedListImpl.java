@@ -26,9 +26,9 @@ public class OrderedSingleLinkedListImpl<T> extends SingleLinkedListImpl<T> impl
 
     public OrderedSingleLinkedListImpl() {
         this.comparator = (a, b) -> (a == null) ? BIGGER :
-                (b == null) ? SMALLER :
-                        (a.hashCode() > b.hashCode()) ? BIGGER :
-                                (a.hashCode() == b.hashCode()) ? EQUAL : SMALLER;
+                                    (b == null) ? SMALLER :
+                                    (a.hashCode() > b.hashCode()) ? BIGGER :
+                                    (a.hashCode() == b.hashCode()) ? EQUAL : SMALLER;
     }
 
     public OrderedSingleLinkedListImpl(Comparator<T> comparator) {
