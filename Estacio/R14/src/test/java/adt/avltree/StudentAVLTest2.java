@@ -143,7 +143,7 @@ public class StudentAVLTest2 {
         assertEquals(avl.height(), 2);
         assertEquals(avl.height(), 2);
         assertTrue(avl.getRoot().getData().equals(103));
-        ((BSTNode<?>) avl.getRoot()).printTree();
+        //((BSTNode<?>) avl.getRoot()).printTree();
     }
 
     @Test
