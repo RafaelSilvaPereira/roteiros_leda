@@ -17,9 +17,6 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements
     public static final int UNBALANCED_LEFT = 1;
     public static final int UNBALANCED_RIGHT = -1;
 
-    // TODO Do not forget: you must override the methods insert and remove
-    // conveniently.
-
     // AUXILIARY
     protected int calculateBalance(BSTNode<T> node) {
         return (node.isEmpty()) ? ZERO :
@@ -61,9 +58,11 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements
 
         node.setRight(rightChild.getLeft());
         rightChild.setLeft(node);
-        if (this.isLeftChild(node)) {
+        if (node.getParent() == null) {
+            this.root = rightChild;
+        } else if (this.isLeftChild(node)) {
             node.getParent().setLeft(rightChild);
-        } else if (node.getParent() != null) {
+        } else {
             node.getParent().setRight(rightChild);
         }
         rightChild.setParent(node.getParent());
