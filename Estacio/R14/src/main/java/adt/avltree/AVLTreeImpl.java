@@ -28,13 +28,13 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements
         int balance = this.calculateBalance(node);
         if (balance > UNBALANCED_LEFT) {
             BSTNode<T> leftChild = (BSTNode<T>) node.getLeft();
-            if (this.isOneDegree(leftChild) && this.hasOnlyRightChild(leftChild)) {
+            if (this.calculateBalance(leftChild) <= UNBALANCED_RIGHT) {
                 this.leftRotation(leftChild);
             }
             this.rightRotation(node);
         } else if (balance < UNBALANCED_RIGHT) {
             BSTNode<T> rightChild = (BSTNode<T>) node.getRight();
-            if (this.isOneDegree(rightChild) && this.hasOnlyLeftChild(rightChild)) {
+            if (this.calculateBalance(rightChild) >= UNBALANCED_LEFT) {
                 this.rightRotation(rightChild);
             }
             this.leftRotation(node);
