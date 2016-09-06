@@ -26,7 +26,7 @@ public class Util {
         rightChild.setParent(node.getParent());
         node.setParent(rightChild);
 
-        return (BSTNode<T>) node.getParent();
+        return rightChild;
     }
 
     private static <T extends Comparable<T>> boolean isLeftChild(BSTNode<T> node) {
@@ -56,7 +56,7 @@ public class Util {
         leftChild.setParent(node.getParent());
         node.setParent(leftChild);
 
-        return (BSTNode<T>) node.getParent();
+        return leftChild;
     }
 
 }
