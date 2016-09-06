@@ -2,6 +2,7 @@ package adt.avltree;
 
 import adt.bst.BSTImpl;
 import adt.bst.BSTNode;
+import adt.bt.Util;
 
 /**
  * Performs consistency validations within a AVL Tree instance
@@ -54,36 +55,18 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements
 
     // AUXILIARY
     protected void leftRotation(BSTNode<T> node) {
-        BSTNode<T> rightChild = (BSTNode<T>) node.getRight();
-
-        node.setRight(rightChild.getLeft());
-        rightChild.setLeft(node);
-        if (node.getParent() == null) {
-            this.root = rightChild;
-        } else if (this.isLeftChild(node)) {
-            node.getParent().setLeft(rightChild);
-        } else {
-            node.getParent().setRight(rightChild);
+        BSTNode<T> balancedNode = Util.leftRotation(node);
+        if (balancedNode.getParent() == null) {
+            this.root = balancedNode;
         }
-        rightChild.setParent(node.getParent());
-        node.setParent(rightChild);
     }
 
     // AUXILIARY
     protected void rightRotation(BSTNode<T> node) {
-        BSTNode<T> leftChild = (BSTNode<T>) node.getLeft();
-
-        node.setLeft(leftChild.getRight());
-        leftChild.setRight(node);
-        if (node.getParent() == null) {
-            this.root = leftChild;
-        } else if (this.isLeftChild(node)) {
-            node.getParent().setLeft(leftChild);
-        } else {
-            node.getParent().setRight(leftChild);
+        BSTNode<T> balancedNode = Util.rightRotation(node);
+        if (balancedNode.getParent() == null) {
+            this.root = balancedNode;
         }
-        leftChild.setParent(node.getParent());
-        node.setParent(leftChild);
     }
 
     @Override
