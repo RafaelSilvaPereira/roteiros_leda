@@ -20,10 +20,8 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 
 	@Override
 	public void remove(T element) {
-		// As long as we only update the values of the nodes we can use the old
-		// reference to the node we want to apply the rebalance
 		BSTNode<T> node = search(element);
-		super.remove(element);
+		node = super.remove(node);
 		rebalanceUp(node);
 	}
 

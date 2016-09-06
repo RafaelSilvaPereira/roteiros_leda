@@ -231,4 +231,51 @@ public class StudentAVLTest2 {
 			assertEquals(Math.floor(Math.log(avl.size()) / Math.log(2)), avl.height(), 0.1);
 		}
 	}
+	
+	@Test
+	public void testRemove2() {
+		avl.insert(55);
+		avl.insert(9);
+		avl.insert(91);
+		avl.insert(12);
+
+		avl.remove(-1);
+		assertEquals(4, avl.size());
+
+		avl.remove(91);
+		assertEquals(3, avl.size());
+		assertArrayEquals(new Integer[] { 12, 9, 55 }, avl.preOrder());
+
+		avl.remove(12);
+		assertEquals(2, avl.size());
+		assertArrayEquals(new Integer[] { 55, 9 }, avl.preOrder());
+
+		avl.remove(9);
+		avl.remove(55);
+		assertEquals(NIL, avl.getRoot());
+		assertTrue(avl.isEmpty());
+
+		avl = new AVLTreeImpl<>();
+		avl.insert(10);
+		avl.insert(15);
+		avl.insert(6);
+		avl.insert(4);
+		avl.insert(8);
+		avl.insert(12);
+		avl.insert(18);
+		avl.insert(2);
+		avl.insert(5);
+		avl.insert(7);
+		avl.insert(9);
+		avl.insert(13);
+		avl.insert(16);
+		avl.insert(19);
+		avl.insert(3);
+		avl.insert(17);
+
+//		((BSTNode)avl.getRoot()).printTree();
+		avl.remove(10);
+//		((BSTNode)avl.getRoot()).printTree();
+		assertEquals(avl.getRoot().getRight().getData(), new Integer(16));
+	}
 }

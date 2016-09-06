@@ -43,7 +43,7 @@ public class BSTNode<T extends Comparable<T>> extends BTNode<T> {
 //	@Override
 //	public BSTNode<T> getRight() {
 //		return (BSTNode<T>) super.getRight();
-	//	}
+//		}
 	
 	//código abaixo é um exempo de uso do padrão Builder para construir
 	//objetos do tipo BSTNode sem usar construtor diretamente.

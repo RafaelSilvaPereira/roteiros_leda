@@ -180,7 +180,8 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 			remove(nodeToRemove);
 	}
 
-	private void remove(BSTNode<T> nodeAt) {
+	protected BSTNode<T> remove(BSTNode<T> nodeAt) {
+		BSTNode<T> removed = nodeAt;
 		if (!nodeAt.isEmpty()) {
 			if (nodeAt.getLeft().isEmpty() || nodeAt.getRight().isEmpty()) {
 				BSTNode<T> newThis = getLeft(nodeAt);
@@ -195,12 +196,14 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 				if (!isNull(nodeAt.getRight())) {
 					nodeAt.getRight().setParent(nodeAt);
 				}
+				
 			} else {
 				BSTNode<T> newThis = sucessor(nodeAt.getData());
 				nodeAt.setData(newThis.getData());
-				remove(newThis);
+				removed = remove(newThis);
 			}
 		}
+		return removed;
 	}
 
 	@Override
