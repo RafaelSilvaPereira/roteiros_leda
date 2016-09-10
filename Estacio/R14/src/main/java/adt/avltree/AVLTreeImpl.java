@@ -80,7 +80,7 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements
     public void remove(T element) {
         BSTNode<T> node = this.search(element);
         if (!node.isEmpty()) {
-            super.remove(element);
+            node = super.remove(node);
             this.rebalanceUp(node);
         }
     }

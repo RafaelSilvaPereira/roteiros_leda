@@ -8,42 +8,42 @@ public class BSTNode<T extends Comparable<T>> extends BTNode<T> {
 		super();
 	}
 	
-//	public void printTree() {
-//	    if (right != null && !right.isEmpty()) {
-//	        getRight().printTree(true, "");
-//	    }
-//	    System.out.println(this.data + "");
-//	    if (left != null && !left.isEmpty()) {
-//	        getLeft().printTree(false, "");
-//	    }
-//	}
-//
-//	public void printTree(boolean isRight, String indent) {
-//	    if (right != null && !right.isEmpty()) {
-//	        getRight().printTree(true, indent + (isRight ? "       " : " |      "));
-//	    }
-//	    System.out.print(indent);
-//	    if (isRight) {
-//	    	System.out.print(" /");
-//	    } else {
-//	    	System.out.print(" \\");
-//	    }
-//	    System.out.print("----- ");
-//	    System.out.println(this.data + "");
-//	    if (left != null && !left.isEmpty()) {
-//	        getLeft().printTree(false, indent + (isRight ? " |      " : "        "));
-//	    }
-//	}
-//	
-//	@Override
-//	public BSTNode<T> getLeft() {
-//		return (BSTNode<T>) super.getLeft();
-//	}
-//	
-//	@Override
-//	public BSTNode<T> getRight() {
-//		return (BSTNode<T>) super.getRight();
-//		}
+	public void printTree() {
+	    if (right != null && !right.isEmpty()) {
+	        getRight().printTree(true, "");
+	    }
+	    System.out.println(this.data + "");
+	    if (left != null && !left.isEmpty()) {
+	        getLeft().printTree(false, "");
+	    }
+	}
+
+	public void printTree(boolean isRight, String indent) {
+	    if (right != null && !right.isEmpty()) {
+	        getRight().printTree(true, indent + (isRight ? "       " : " |      "));
+	    }
+	    System.out.print(indent);
+	    if (isRight) {
+	    	System.out.print(" /");
+	    } else {
+	    	System.out.print(" \\");
+	    }
+	    System.out.print("----- ");
+	    System.out.println(this.data + "");
+	    if (left != null && !left.isEmpty()) {
+	        getLeft().printTree(false, indent + (isRight ? " |      " : "        "));
+	    }
+	}
+	
+	@Override
+	public BSTNode<T> getLeft() {
+		return (BSTNode<T>) super.getLeft();
+	}
+	
+	@Override
+	public BSTNode<T> getRight() {
+		return (BSTNode<T>) super.getRight();
+		}
 	
 	//código abaixo é um exempo de uso do padrão Builder para construir
 	//objetos do tipo BSTNode sem usar construtor diretamente.

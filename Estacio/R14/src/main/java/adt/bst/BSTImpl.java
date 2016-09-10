@@ -197,13 +197,14 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
      *
      * @param node Node to be removed.
      */
-    private void remove(BSTNode<T> node) {
+    protected BSTNode<T> remove(BSTNode<T> node) {
         if (node.isLeaf()) {
             node.setData(null);
+            return node;
         } else if (isOneDegree(node)) {
-            this.removeOneDegree(node);
+            return this.removeOneDegree(node);
         } else {
-            this.removeTwoDegree(node);
+            return this.removeTwoDegree(node);
         }
     }
 
@@ -212,7 +213,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
      *
      * @param node Node to be removed.
      */
-    private void removeTwoDegree(BSTNode<T> node) {
+    private BSTNode<T> removeTwoDegree(BSTNode<T> node) {
         BSTNode<T> auxNode = minimum((BSTNode) node.getRight());
         if (auxNode.isEmpty())
             maximum((BSTNode) node.getLeft());
@@ -220,7 +221,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
         T aux = node.getData();
         node.setData(auxNode.getData());
         auxNode.setData(aux);
-        remove(auxNode);
+        return remove(auxNode);
     }
 
     /**
@@ -228,7 +229,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
      *
      * @param node Node to be removed.
      */
-    private void removeOneDegree(BSTNode<T> node) {
+    private BSTNode<T> removeOneDegree(BSTNode<T> node) {
         /* No need to verify if has only the right child */
         BSTNode<T> child = (hasOnlyLeftChild(node)) ? (BSTNode) node.getLeft() : (BSTNode) node.getRight();
 
@@ -243,6 +244,8 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
             child.setParent(null);
             this.root = child;
         }
+
+        return child;
     }
 
     @Override
