@@ -4,15 +4,15 @@ import adt.bt.BTNode;
 
 public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
-	private static final int GREATER = 1;
+	protected static final int GREATER = 1;
 
-	private static final int LESSER = -1;
+	protected static final int LESSER = -1;
 
-	private static final int PRE_ORDER = -1;
+	protected static final int PRE_ORDER = -1;
 
-	private static final int ORDER = 0;
+	protected static final int ORDER = 0;
 
-	private static final int POST_ORDER = 1;
+	protected static final int POST_ORDER = 1;
 
 	protected BSTNode<T> root;
 
