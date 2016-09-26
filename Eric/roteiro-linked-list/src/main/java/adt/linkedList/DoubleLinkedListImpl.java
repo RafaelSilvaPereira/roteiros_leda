@@ -4,81 +4,91 @@ public class DoubleLinkedListImpl<T> extends SingleLinkedListImpl<T> implements 
 
 	protected DoubleLinkedListNode<T> last;
 
+	public DoubleLinkedListImpl() {
+		this.head = this.last = new DoubleLinkedListNode<T>();
+	}
+
 	@Override
-	public void remove(T element) {
-		if (!isEmpty() && element != null) {
-			if (head.getData().equals(element)) {
-				head = head.getNext();
-			} else if (size() > ONE) {
-				SingleLinkedListNode<T> aux = head.getNext();
-				while (aux.getNext() != null && !aux.getData().equals(element))
-					aux = aux.getNext();
-				
-				if (aux.getData().equals(element)) {
-					DoubleLinkedListNode<T> toRemove = (DoubleLinkedListNode<T>) aux,
-											previous = toRemove.getPrevious(),
-											next = (DoubleLinkedListNode<T>)toRemove.getNext();
-					if (next != null)
-						next.setPrevious(previous);
-					// we don't need to check because it'll be the second at least
-					previous.setNext(next);
-				}
+	public void insert(T element) {
+		if (!isNull(element)) {
+			if (isEmpty()) {
+				DoubleLinkedListNode<T> newHead = newNode(element, last, null);
+				newHead.setPrevious(newNode(null, newHead, null));
+				setHead(newHead);
+				last.setPrevious(newHead);
+			} else {
+				DoubleLinkedListNode<T> newLast = newNode(null, null, last);
+				last.setData(element);
+				last.setNext(newLast);
+				last = newLast;
 			}
 		}
 	}
 
 	@Override
-	public void insert(T element) {
-		if (element != null) {
-			DoubleLinkedListNode<T> newElem = new DoubleLinkedListNode<>(element, null, last);
-			if (isEmpty()) {
-				head = last = newElem;
-			} else {
-				last.setNext(newElem);
-				last = newElem;
+	public void remove(T element) {
+		if (!isEmpty() && !isNull(element)) {
+			DoubleLinkedListNode<T> aux = getHead();
+			while (!aux.isNIL() && !equalData(element, aux)) {
+				aux = getNext(aux);
+			}
+			if (!aux.isNIL() && equalData(element, aux)) {
+				DoubleLinkedListNode<T> newNext = getNext(getNext(aux));
+				aux.setData(aux.getNext().getData());
+				aux.setNext(newNext);
+				if (newNext != null)
+					newNext.setPrevious(aux);
 			}
 		}
 	}
 
 	@Override
 	public void insertFirst(T element) {
-		if (element != null) {
-			DoubleLinkedListNode<T> oldHead = (DoubleLinkedListNode<T>) this.head;
-			DoubleLinkedListNode<T> newHead = new DoubleLinkedListNode<>(element, oldHead, null);
-			if (isEmpty()) {
-				last = newHead;
-			} else {
-				oldHead.setPrevious(newHead);
-			}
-			this.head = newHead;
+		if (!isNull(element)) {
+			DoubleLinkedListNode<T> newHead = newNode(element, getHead(), getHead().getPrevious());
+			newHead.getPrevious().setNext(newHead);
+			getHead().setPrevious(newHead);
+			setHead(newHead);
 		}
 	}
 
 	@Override
 	public void removeFirst() {
 		if (!isEmpty()) {
-			if (size() > ONE) {
-				DoubleLinkedListNode<T> secondElement = (DoubleLinkedListNode<T>) this.head.getNext();
-				secondElement.setPrevious(null);
-				this.head = secondElement;
-			} else {
-				this.head = null;
-				this.last = null;
-			}
+			getHead().setData(null);
+			getHead().setPrevious(null);
+			setHead(getHead().getNext());
 		}
 	}
 
 	@Override
 	public void removeLast() {
 		if (!isEmpty()) {
-			if (size() > ONE) {
-				DoubleLinkedListNode<T> newLast = this.last.getPrevious();
-				newLast.setNext(null);
-				this.last = newLast;
-			} else {
-				this.head = null;
-				this.last = null;
-			}
+			DoubleLinkedListNode<T> preLast = last.getPrevious();
+			preLast.setData(null);
+			preLast.setNext(null);
+			last = preLast;
 		}
+	}
+
+	private boolean equalData(T element, DoubleLinkedListNode<T> aux) {
+		return aux.getData().equals(element);
+	}
+
+	private boolean isNull(Object o) {
+		return o == null;
+	}
+
+	private DoubleLinkedListNode<T> newNode(T data, DoubleLinkedListNode<T> next, DoubleLinkedListNode<T> prev) {
+		return new DoubleLinkedListNode<T>(data, next, prev);
+	}
+
+	@Override
+	public DoubleLinkedListNode<T> getHead() {
+		return (DoubleLinkedListNode<T>) super.getHead();
+	}
+	
+	private DoubleLinkedListNode<T> getNext(DoubleLinkedListNode<T> node) {
+		return (DoubleLinkedListNode<T>) node.getNext();
 	}
 }
