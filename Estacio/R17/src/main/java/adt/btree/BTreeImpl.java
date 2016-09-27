@@ -25,7 +25,7 @@ public class BTreeImpl<T extends Comparable<T>> implements BTree<T> {
 
     @Override
     public int height() {
-        return height(this.root);
+        return height(this.root) - 1;
     }
 
     private int height(BNode<T> node) {
@@ -97,6 +97,11 @@ public class BTreeImpl<T extends Comparable<T>> implements BTree<T> {
         this.insert(this.root, element);
     }
 
+    /*
+     * Como não foi especificado o algoritmo de inserção, fiz da forma que o professor João Arthur explicou em
+     * sala. Algoritmo que abre espaço nos nós acima da folha em que será inserido o nó, se o mesmo estiver cheio
+     * para que se precisar fazer promote, o nó acima terá espaço.
+     */
     private void insert(BNode<T> node, T element) {
         if (!node.isFull() && node.isLeaf()) {
             node.addElement(element);
