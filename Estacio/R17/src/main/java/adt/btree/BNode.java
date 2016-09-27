@@ -89,33 +89,40 @@ public class BNode<T extends Comparable<T>> {
 
     protected void split() {
         BNode<T> aux = new BNode<T>(this.maxChildren);
-        int middleElement = (this.getElements().size() / 2);
-        aux.addElement(this.getElements().get(middleElement));
+        int middleElementIndex = (this.getElements().size() / 2);
+        aux.addElement(this.getElements().get(middleElementIndex));
 
         BNode<T> leftChild = new BNode<T>(this.maxChildren);
         BNode<T> rightChild = new BNode<T>(this.maxChildren);
         aux.addChild(FIRST_INDEX, leftChild);
         aux.addChild(FIRST_INDEX + 1, rightChild);
 
-        // Copy elements
-        for (int index = FIRST_INDEX; index < middleElement; index++) {
-            leftChild.addElement(this.getElements().get(index));
-        }
-        for (int index = middleElement + 1; index < this.getElements().size(); index++) {
-            rightChild.addElement(this.getElements().get(index));
-        }
-
-        // Children
-        for (int index = FIRST_INDEX; index <= middleElement && index < this.getChildren().size(); index++) {
-            leftChild.addChild(index, this.getChildren().get(index));
-        }
-        for (int childIndex = FIRST_INDEX, thisIndex = middleElement + 1; thisIndex < this.getChildren().size();
-             thisIndex++, childIndex++) {
-            rightChild.addChild(childIndex, this.getChildren().get(thisIndex));
-        }
+        leftChild.getNodeElements(this, FIRST_INDEX, middleElementIndex - 1);
+        rightChild.getNodeElements(this, middleElementIndex + 1, this.getElements().size() - 1);
+        leftChild.getLeftChildren(this, middleElementIndex);
+        rightChild.getRightChildren(this, middleElementIndex);
 
         this.setElements(aux.getElements());
         this.setChildren(aux.getChildren());
+    }
+
+    private void getRightChildren(BNode<T> fromNode, int middleElementIndex) {
+        for (int childIndex = FIRST_INDEX, thisIndex = middleElementIndex + 1; thisIndex < fromNode.getChildren().size();
+             thisIndex++, childIndex++) {
+            this.addChild(childIndex, fromNode.getChildren().get(thisIndex));
+        }
+    }
+
+    private void getLeftChildren(BNode<T> fromNode, int middleElementIndex) {
+        for (int index = FIRST_INDEX; index <= middleElementIndex && index < fromNode.getChildren().size(); index++) {
+            this.addChild(index, fromNode.getChildren().get(index));
+        }
+    }
+
+    private void getNodeElements(BNode<T> fromNode, int firstIndex, int lastIndex) {
+        for (int index = firstIndex; index <= lastIndex; index++) {
+            this.addElement(fromNode.getElements().get(index));
+        }
     }
 
     protected void promote() {
@@ -124,7 +131,7 @@ public class BNode<T extends Comparable<T>> {
         this.parent.addElement(element);
         int elementIndex = this.parent.getElements().indexOf(element);
 
-        if(this.parent.getChildren().size() > elementIndex)
+        if (this.parent.getChildren().size() > elementIndex)
             this.parent.removeChild(this.parent.getChildren().get(elementIndex));
         this.parent.addChild(elementIndex, this.getChildren().get(FIRST_INDEX));
         this.parent.addChild(elementIndex + 1, this.getChildren().get(FIRST_INDEX + 1));
@@ -185,15 +192,5 @@ public class BNode<T extends Comparable<T>> {
     public void setMaxChildren(int maxChildren) {
         this.maxChildren = maxChildren;
     }
-
-
-//    public String toString() {
-//        String saida = this.elements.toString();
-//        if (!this.children.isEmpty())
-//            saida += "\n";
-//        for (BNode<T> n : this.children) {
-//            saida += "=" + n.toString();
-//        }
-//        return saida;
-//    }
+    
 }
