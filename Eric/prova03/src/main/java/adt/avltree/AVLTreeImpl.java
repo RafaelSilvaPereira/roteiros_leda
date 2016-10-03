@@ -20,16 +20,19 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 
 	@Override
 	public void remove(T element) {
-		BSTNode<T> node = search(element);
-		node = super.remove(node);
-		rebalanceUp(node);
+		if (!isNull(element)) {
+			BSTNode<T> node = search(element);
+			node = super.remove(node);
+			rebalanceUp(node);
+		}
 	}
 
 	@Override
 	public void insert(T element) {
-		super.insert(element);
-		BSTNode<T> node = search(element);
-		rebalanceUp(node);
+		if (!isNull(element)) {
+			BSTNode<T> node = super.insert(root, element);
+			rebalanceUp(node);
+		}
 	}
 
 	// AUXILIARY
@@ -39,10 +42,16 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 	 * otherwise.
 	 */
 	protected int calculateBalance(BSTNode<T> node) {
-		return node == null || node.isEmpty() ? 0 : height(getRight(node)) - height(getLeft(node));
+		return isNull(node) || node.isEmpty() ? ZERO : height(getRight(node)) - height(getLeft(node));
 	}
 
 	// AUXILIARY
+	/**
+	 * Rebalances the node, rotating it to left or right.
+	 * 
+	 * @param node
+	 *            Node to be balanced.
+	 */
 	protected void rebalance(BSTNode<T> node) {
 		int balance = calculateBalance(node);
 		if (balance < UNBALANCED_LEFT) {
@@ -59,25 +68,43 @@ public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements 
 	}
 
 	// AUXILIARY
+	/**
+	 * Recursive method that balances all the nodes from this to the root.
+	 * 
+	 * @param node
+	 *            Node to start the rebalance.
+	 */
 	protected void rebalanceUp(BSTNode<T> node) {
-		if (node != null) {
+		if (!isNull(node)) {
 			rebalance(node);
 			rebalanceUp(getParent(node));
 		}
 	}
 
 	// AUXILIARY
+	/**
+	 * Rotates the node to left.
+	 * 
+	 * @param node
+	 *            Node to be rotated.
+	 */
 	protected void leftRotation(BSTNode<T> node) {
 		BSTNode<T> newNode = Util.leftRotation(node);
-		if (newNode.getParent() == null) {
+		if (isNull(newNode.getParent())) {
 			root = newNode;
 		}
 	}
 
 	// AUXILIARY
+	/**
+	 * Rotates the node to right.
+	 * 
+	 * @param node
+	 *            Node to be rotated.
+	 */
 	protected void rightRotation(BSTNode<T> node) {
 		BSTNode<T> newNode = Util.rightRotation(node);
-		if (newNode.getParent() == null) {
+		if (isNull(newNode.getParent())) {
 			root = newNode;
 		}
 	}

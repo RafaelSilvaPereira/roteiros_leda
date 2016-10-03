@@ -4,9 +4,9 @@ import adt.bt.BTNode;
 
 public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
-	private static final int GREATER = 1;
+	protected static final int GREATER = 1;
 
-	private static final int LESSER = -1;
+	protected static final int LESSER = -1;
 
 	private static final int PRE_ORDER = -1;
 
@@ -182,6 +182,17 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 			remove(nodeToRemove);
 	}
 
+	/**
+	 * Removes the given node, or it's successor if it has two children. In this
+	 * strategy we don't remove the references for the node, only it's value is
+	 * updated and the reference to it's child that is lost. Then we can use
+	 * methods of rebalance in the "old" node, which still exists in same
+	 * position.
+	 * 
+	 * @param nodeAt
+	 *            Node to be removed.
+	 * @return Node which value was removed.
+	 */
 	protected BSTNode<T> remove(BSTNode<T> nodeAt) {
 		BSTNode<T> removed = nodeAt;
 		if (!nodeAt.isEmpty()) {
@@ -198,7 +209,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 				if (!isNull(nodeAt.getRight())) {
 					nodeAt.getRight().setParent(nodeAt);
 				}
-				
+
 			} else {
 				BSTNode<T> newThis = sucessor(nodeAt.getData());
 				nodeAt.setData(newThis.getData());
@@ -274,7 +285,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 		return result;
 	}
 
-	private boolean isNull(Object o) {
+	protected boolean isNull(Object o) {
 		return o == null;
 	}
 

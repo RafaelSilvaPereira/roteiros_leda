@@ -9,28 +9,35 @@ import adt.rbtree.RBNode.Colour;
 public class RBTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements RBTree<T> {
 
 	private static final Colour RED = RBNode.Colour.RED;
-	
+
 	private static final Colour BLACK = RBNode.Colour.BLACK;
 
 	public RBTreeImpl() {
 		this.root = new RBNode<T>();
 	}
 
+	/**
+	 * Calculates the black height of the tree.
+	 * 
+	 * @return Tree's black height.
+	 */
 	protected int blackHeight() {
 		return blackHeight(getRoot());
 	}
-	
+
+	/**
+	 * Calculates the black height for the given node.
+	 * 
+	 * @return Black height for the node.
+	 */
 	private int blackHeight(RBNode<T> node) {
-		int height = node.getColour() == BLACK  && !node.isEmpty() ? 1 : 0;
+		int height = node.getColour() == BLACK && !node.isEmpty() ? 1 : 0;
 		height += node.isEmpty() ? 0 : blackHeight(getRight(node));
 		return height;
 	}
 
 	protected boolean verifyProperties() {
-		boolean resp = verifyNodesColour() 
-				&& verifyNILNodeColour() 
-				&& verifyRootColour() 
-				&& verifyChildrenOfRedNodes()
+		boolean resp = verifyNodesColour() && verifyNILNodeColour() && verifyRootColour() && verifyChildrenOfRedNodes()
 				&& verifyBlackHeight();
 		return resp;
 	}
@@ -65,16 +72,22 @@ public class RBTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements R
 		return verifyChildrenOfRedNodes(getRoot());
 	}
 
+	/**
+	 * Verifies if all the red nodes, starting from the node to it's leaves,
+	 * have only black children.
+	 * 
+	 * @param node
+	 *            Node to start the verification.
+	 * @return True if all red nodes have only black children.
+	 */
 	private boolean verifyChildrenOfRedNodes(RBNode<T> node) {
 		boolean isValid = true;
 		boolean isRedNode = node.getColour() == RED;
 		if (node != null && !node.isEmpty() && isRedNode) {
-			isValid = getLeft(node).getColour() == BLACK
-					&& getRight(node).getColour() == BLACK;
+			isValid = getLeft(node).getColour() == BLACK && getRight(node).getColour() == BLACK;
 		}
 		if ((!isRedNode || isValid) && !node.isEmpty()) {
-			isValid = verifyChildrenOfRedNodes(getLeft(node))
-					&& verifyChildrenOfRedNodes(getRight(node));
+			isValid = verifyChildrenOfRedNodes(getLeft(node)) && verifyChildrenOfRedNodes(getRight(node));
 		}
 		return isValid;
 	}
@@ -88,7 +101,13 @@ public class RBTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements R
 			throw new RuntimeException("The black heights of the tree are invalid.");
 		return true;
 	}
-	
+
+	/**
+	 * Verifies if all nodes from this do it's leaves have the same black height
+	 * for it's right and left.
+	 * 
+	 * @return True if all nodes have same right and left black height.
+	 */
 	private boolean verifiBlackHeight(RBNode<T> node) {
 		boolean heightsOk = node.isEmpty() || (blackHeight(getLeft(node)) == blackHeight(getRight(node)));
 		boolean shouldCallAgain = !node.isEmpty();
@@ -117,9 +136,9 @@ public class RBTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements R
 			fixUpCase1(nodeAt);
 		} else {
 			int comparation = nodeAt.getData().compareTo(element);
-			if (comparation == 1)
+			if (comparation == GREATER)
 				added = insert(getLeft(nodeAt), element);
-			else if (comparation == -1)
+			else if (comparation == LESSER)
 				added = insert(getRight(nodeAt), element);
 		}
 		return added;
@@ -178,8 +197,8 @@ public class RBTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements R
 
 	protected void fixUpCase4(RBNode<T> node) {
 		RBNode<T> parent = getParent(node);
-		boolean isZigZag = !((isLeftChild(node) && isLeftChild(parent)) 
-						|| (!isLeftChild(node) && !isLeftChild(parent)));
+		boolean isZigZag = !((isLeftChild(node) && isLeftChild(parent))
+				|| (!isLeftChild(node) && !isLeftChild(parent)));
 		if (isZigZag) {
 			if (isLeftChild(node)) {
 				rightRotation(getParent(node));
@@ -239,9 +258,5 @@ public class RBTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements R
 
 	protected RBNode<T> getLeft(BTNode<T> node) {
 		return (RBNode<T>) node.getLeft();
-	}
-
-	private RBNode<T> thisNode(BTNode<T> btNode) {
-		return (RBNode<T>) btNode;
 	}
 }
