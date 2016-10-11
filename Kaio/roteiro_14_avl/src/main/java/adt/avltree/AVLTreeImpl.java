@@ -1,122 +1,183 @@
+
 package adt.avltree;
 
 import adt.bst.BSTImpl;
 import adt.bst.BSTNode;
 import adt.bt.Util;
 
-/**
- * Performs consistency validations within a AVL Tree instance
- *
- * @param <T>
- * @author Claudio Campelo
- */
-public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements AVLTree<T> {
+   /**
+    * 
+    * Performs consistency validations within a AVL Tree instance
+   * 
+   * @author Claudio Campelo
+   *
+   * @param <T>
+   */
+   public class AVLTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements AVLTree<T> {
+    
+     public void insert(T element) {
+      insert(element, super.getRoot(), new BSTNode<T>());
+    }
+    
+    private void insert(T element, BSTNode<T> node, BSTNode<T> parent) {
+      if (element == null) {
+       return;
+     }
+     
+     if (node.isEmpty()) {
+       node.setData(element);
+       node.setLeft(new BSTNode<T>());
+       node.setRight(new BSTNode<T>());
+       node.setParent(parent);
+     } else if (element.compareTo(node.getData()) < 0) {
+       insert(element, (BSTNode<T>) node.getLeft(), node);
+     } else if (element.compareTo(node.getData()) > 0) {
+       insert(element, (BSTNode<T>) node.getRight(), node);
+     }
+     rebalance(node);
+   }
+   
+   public void remove(T element) {
+    if (element == null) {
+     return;
+   }
+   
+   BSTNode<T> found = search(element);
+   
+   remove(found);
+ }
+ 
+ protected void remove(BSTNode<T> node) {
+  if (node == null) {
+   return;
+ }
+        // if the node is leaf
+ if (node.isLeaf()) {
+   if (node.equals(this.root)) {
+    this.root = new BSTNode<T>();
+  } else {
+    if (node.getParent().getLeft().equals(node)) {
+     node.getParent().setLeft(new BSTNode<T>());
+   } else {
+     node.getParent().setRight(new BSTNode<T>());
+   }
+ }
+ rebalanceUp(node);
+           // if there is only one son
+} else if (!node.getRight().isEmpty() && node.getLeft().isEmpty()) {
+ if (node.equals(this.root)) {
+  this.root = (BSTNode<T>) node.getRight();
+} else {
+              // check if the node is on the left side of it's parent
+  if (node.getParent().getLeft().equals(node)) {
+   node.getParent().setLeft(node.getRight());
+ } else {
+   node.getParent().setRight(node.getRight());
+ }
+ node.getRight().setParent(node.getParent());
+}
+rebalanceUp(node);
+} else if (node.getRight().isEmpty() && !node.getLeft().isEmpty()) {
+ if (node.equals(this.root)) {
+  this.root = (BSTNode<T>) node.getLeft();
+} else {
+  if (node.getParent().getLeft().equals(node)) {
+   node.getParent().setLeft(node.getLeft());
+ } else {
+   node.getParent().setRight(node.getLeft());
+ }
+ node.getLeft().setParent(node.getParent());
+}
+rebalanceUp(node);
+} else {
+ BSTNode<T> help = sucessor(node.getData());
+ if (help == null) {
+  help = predecessor(node.getData());
+}
+T auxData = node.getData();
+node.setData(help.getData());
+help.setData(auxData);
+remove(help);
+}
+}
 
-	private static final int ZERO = 0;
+    // AUXILIARY
+protected int calculateBalance(BSTNode<T> node) {
+ 
+ if (!node.isEmpty()) {
+  return height((BSTNode<T>) node.getLeft()) - super.height((BSTNode<T>) node.getRight());
+}
 
-	@Override
-	public void insert(T element) {
-		super.insert(element);
-		BSTNode<T> node = super.search(element);
+return 0;
+}
 
-		rebalanceUp(node);
-	}
+    // AUXILIARY
+protected void rebalance(BSTNode<T> node) {
+ if (node == null || node.isEmpty()) {
+  return;
+}
 
-	@Override
-	public void remove(T element) {
-		BSTNode<T> node = search(element);
+int balance = calculateBalance(node);
 
-		if (!node.isEmpty()) {
-			super.remove(element);
-			rebalanceUp(node);
-		}
-	}
+if (Math.abs(balance) <= 1) {
+  return;
+}
 
-	// AUXILIARY
-	/**
-	 * Rotaciona o node para a esquerda
-	 * @param node
-	 */
-	protected void leftRotation(BSTNode<T> node) {
-		BSTNode<T> aux = Util.leftRotation(node);
-		checkParent((BSTNode<T>) aux);
-	}
+if (balance > 0) {
+ 
+  int sonBalance = calculateBalance((BSTNode<T>) node.getLeft());
+  
+  if (sonBalance < 0) {
+   this.leftRotation((BSTNode<T>) node.getLeft());
+ }
+ this.rightRotation(node);
+} else {
+  int sonBalance = calculateBalance((BSTNode<T>) node.getRight());
+  
+  if (sonBalance > 0) {
+   this.rightRotation((BSTNode<T>) node.getRight());
+ }
+ 
+ this.leftRotation(node);
+}
+}
 
-	// AUXILIARY
-	/**
-	 * Rotaciona o node para a direita
-	 * @param node
-	 */
-	protected void rightRotation(BSTNode<T> node) {
-		BSTNode<T> aux = Util.rightRotation(node);
-		checkParent((BSTNode<T>) aux);
-	}
+    // AUXILIARY
+protected void rebalanceUp(BSTNode<T> node) {
+ if (node == null || node.isEmpty()) {
+  return;
+}
 
-	// AUXILIARY
-	/**
-	 * Realiza o balanceamento ate a root
-	 * @param node
-	 */
-	protected void rebalanceUp(BSTNode<T> node) {
-		Integer balance = calculateBalance(node);
+BSTNode<T> parent = (BSTNode<T>) node.getParent();
 
-		if (checkAbsoluteBalance(balance))
-			rebalance(node);
+while (!parent.isEmpty()) {
+  rebalance(parent);
+  parent = (BSTNode<T>) parent.getParent();
+}
+}
 
-		if (node.getParent() != null)
-			rebalanceUp((BSTNode<T>) node.getParent());
+    // AUXILIARY
+protected void leftRotation(BSTNode<T> node) {
+ if (node == null) {
+  return;
+}
+BSTNode<T> aux = Util.leftRotation(node);
+if (root.equals(node)) {
+  root = aux;
+}
+}
 
-	}
+    // AUXILIARY
+protected void rightRotation(BSTNode<T> node) {
+ if (node == null) {
+  return;
+}
 
-	// AUXILIARY
-	/**
-	 * Realiza o rebalanceamento
-	 * @param node
-	 */
-	protected void rebalance(BSTNode<T> node) {
-		Integer balance = calculateBalance(node);
+BSTNode<T> aux = Util.rightRotation(node);
+if (this.root.equals(node)) {
+  root = aux;
+}
 
-		if (balance < -1) {
-			BSTNode<T> rightAuxNode = (BSTNode<T>) node.getRight();
-
-			if (calculateBalance(rightAuxNode) >= 1)
-				rightRotation(rightAuxNode);
-
-			leftRotation(node);
-
-		} else if (balance > 1) {
-			BSTNode<T> leftAuxNode = (BSTNode<T>) node.getLeft();
-
-			if (calculateBalance(leftAuxNode) <= -1)
-				leftRotation(leftAuxNode);
-
-			rightRotation(node);
-
-		}
-	}
-
-	// AUXILIARY
-	/**
-	 * Calcula o valor do balance
-	 * @param node
-	 * @return int contendo o valor do balanceamento
-	 */
-	protected int calculateBalance(BSTNode<T> node) {
-		if (!node.isEmpty())
-			return this.height((BSTNode<T>) node.getLeft()) - this.height((BSTNode<T>) node.getRight());
-		
-		return ZERO;
-	}
-	
-	// Metodos para auxilio
-	
-	private void checkParent(BSTNode<T> node) {
-		if (node.getParent() == null)
-			this.root = node;
-	}
-	
-	private boolean checkAbsoluteBalance(Integer balance) {
-		return Math.abs(balance) >= 2;
-	}
+}
 
 }

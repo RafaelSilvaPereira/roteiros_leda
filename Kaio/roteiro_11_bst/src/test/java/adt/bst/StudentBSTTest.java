@@ -234,6 +234,7 @@ public class StudentBSTTest {
 		assertEquals(bst.height(), 5);
 		assertEquals(bst.size(), 16);
 
+		bst.remove(null);
 		assertEquals(bst.height(), 5);
 		assertEquals(bst.size(), 16);
 

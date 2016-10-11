@@ -189,7 +189,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 			BSTNode<T> node = search(element);
 
 			if (!node.isEmpty())
-				remove(node);
+				removeNode(node);
 		}
 	}
 
@@ -197,22 +197,21 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 	 * Remove, recursivamente, um node da arvore.
 	 * @param node
 	 */
-	protected BSTNode<T> remove(BSTNode<T> node) {
-		if (node.isLeaf()) {
+	private void removeNode(BSTNode<T> node) {
+		if (node.isLeaf())
 			node.setData(null);
-			return node;
-		}
-		else if (gotOneSon(node))
-			return removeOneChildrenNode(node);
+
+		else if (gotOneChildren(node))
+			removeOneChildrenNode(node);
 		else
-			return removeTwoChildrenNode(node);
+			removeTwoChildrenNode(node);
 	}
 
 	/**
 	 * Remove um node que tenha apenas um filho.
 	 * @param node
 	 */
-	private BSTNode<T> removeOneChildrenNode(BSTNode<T> node) {
+	private void removeOneChildrenNode(BSTNode<T> node) {
 		BSTNode<T> auxNode;
 
 		if (justLeftSon(node)) {
@@ -233,15 +232,13 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 			}
 			auxNode.setParent(node.getParent());
 		}
-		
-		return auxNode;
 	}
 
 	/**
 	 * Remove da arvore um node que tenha dois filhos.
 	 * @param node
 	 */
-	private BSTNode<T> removeTwoChildrenNode(BSTNode<T> node) {
+	private void removeTwoChildrenNode(BSTNode<T> node) {
 		BSTNode<T> auxNode = minimum((BSTNode<T>) node.getRight());
 
 		T aux = node.getData();
@@ -249,7 +246,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 		node.setData(auxNode.getData());
 		auxNode.setData(aux);
 
-		return remove(auxNode);
+		removeNode(auxNode);
 	}
 
 	@Override
@@ -377,7 +374,7 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 	 * @param node
 	 * @return
 	 */
-	private boolean gotOneSon(BSTNode<T> node) {
+	private boolean gotOneChildren(BSTNode<T> node) {
 		return justLeftSon(node) || justRightSon(node);
 	}
 
