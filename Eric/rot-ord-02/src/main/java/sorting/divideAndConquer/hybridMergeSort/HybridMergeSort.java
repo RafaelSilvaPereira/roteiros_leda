@@ -4,49 +4,52 @@ import sorting.AbstractSorting;
 import sorting.Util;
 
 /**
- * A classe HybridMergeSort representa a implementaÁ„o de uma variaÁ„o do MergeSort 
- * que pode fazer uso do InsertionSort (um algoritmo hÌbrido) da seguinte forma: 
- * o MergeSort È aplicado a entradas maiores a um determinado limite. Caso a entrada 
- * tenha tamanho menor ou igual ao limite o algoritmo usa o InsertionSort. 
+ * A classe HybridMergeSort representa a implementa√ß√£o de uma varia√ß√£o do
+ * MergeSort que pode fazer uso do InsertionSort (um algoritmo h√≠brido) da
+ * seguinte forma: o MergeSort √© aplicado a entradas maiores a um determinado
+ * limite. Caso a entrada tenha tamanho menor ou igual ao limite o algoritmo usa
+ * o InsertionSort.
  * 
- * A implementaÁ„o hÌbrida deve considerar os seguintes detalhes:
- * - Ter contadores das quantidades de MergeSorts e InsertionSorts aplicados, de 
- *   forma que essa informaÁ„o possa ser capturada pelo teste.
- * - A cada chamado do mÈtodo de sort(T[] array) esses contadores s„o resetados. E a cada
- *   chamada interna de um merge ou insertion, os contadores MERGESORT_APPLICATIONS e 
- *   INSERTIONSORT_APPLICATIONS s„o incrementados.
- *  - O InsertionSort utilizado no algoritmo hÌbrido deve ser in-place.
+ * A implementa√ß√£o h√≠brida deve considerar os seguintes detalhes: - Ter
+ * contadores das quantidades de MergeSorts e InsertionSorts aplicados, de forma
+ * que essa informa√ß√£o possa ser capturada pelo teste. - A cada chamado do
+ * m√©todo de sort(T[] array) esses contadores s√£o resetados. E a cada chamada
+ * interna de um merge ou insertion, os contadores MERGESORT_APPLICATIONS e
+ * INSERTIONSORT_APPLICATIONS s√£o incrementados. - O InsertionSort utilizado no
+ * algoritmo h√≠brido deve ser in-place.
  */
 public class HybridMergeSort<T extends Comparable<T>> extends AbstractSorting<T> {
-    
+
 	/**
 	 * For inputs with size less or equal to this value, the insertionsort
 	 * algorithm will be used instead of the mergesort.
 	 */
 	public static final int SIZE_LIMIT = 4;
-	
+
 	protected static int MERGESORT_APPLICATIONS = 0;
 	protected static int INSERTIONSORT_APPLICATIONS = 0;
-	
+
 	@Override
-	public void sort(T[] array,int leftIndex, int rightIndex) {
+	public void sort(T[] array, int leftIndex, int rightIndex) {
 		MERGESORT_APPLICATIONS = 0;
 		INSERTIONSORT_APPLICATIONS = 0;
 		hybridSort(array, leftIndex, rightIndex);
 	}
-	
-	private void hybridSort(T[] array,int leftIndex, int rightIndex) {
-		if (array.length > 1 && rightIndex - leftIndex >= 1) {
-			int size = rightIndex - leftIndex;
-			
-			if (size > SIZE_LIMIT) {
-				int middle = (leftIndex + rightIndex) / 2;
-				hybridSort(array, leftIndex, middle);
-				hybridSort(array, middle + 1, rightIndex);
-				merge(array, leftIndex, middle, rightIndex);
-			} else {
-				insertionSort(array, leftIndex, rightIndex);
-			}
+
+	private void hybridSort(T[] array, int leftIndex, int rightIndex) {
+		if (array == null || leftIndex < 0 || rightIndex < 0 || rightIndex >= array.length || rightIndex - leftIndex < 2
+				|| array.length < 2) {
+			return;
+		}
+		int size = rightIndex - leftIndex;
+
+		if (size > SIZE_LIMIT) {
+			int middle = (leftIndex + rightIndex) / 2;
+			hybridSort(array, leftIndex, middle);
+			hybridSort(array, middle + 1, rightIndex);
+			merge(array, leftIndex, middle, rightIndex);
+		} else {
+			insertionSort(array, leftIndex, rightIndex);
 		}
 	}
 
@@ -60,11 +63,10 @@ public class HybridMergeSort<T extends Comparable<T>> extends AbstractSorting<T>
 		}
 		INSERTIONSORT_APPLICATIONS++;
 	}
-	
+
 	private void merge(T[] array, int start, int middle, int end) {
-		int firstPart = start,
-			secPart = middle + 1;
-		T[] auxArray = (T[])new Comparable[end - start + 1];
+		int firstPart = start, secPart = middle + 1;
+		T[] auxArray = (T[]) new Comparable[end - start + 1];
 
 		int indexAuxArr = 0;
 		while (firstPart <= middle && secPart <= end) {
@@ -77,7 +79,7 @@ public class HybridMergeSort<T extends Comparable<T>> extends AbstractSorting<T>
 			}
 			indexAuxArr++;
 		}
-		
+
 		if (firstPart <= middle) {
 			copyArray(array, auxArray, firstPart, middle, indexAuxArr);
 		}
@@ -87,7 +89,7 @@ public class HybridMergeSort<T extends Comparable<T>> extends AbstractSorting<T>
 		copyArray(auxArray, array, 0, auxArray.length - 1, start);
 		MERGESORT_APPLICATIONS++;
 	}
-	
+
 	private void copyArray(T[] auxArray, T[] mainArray, int from, int to, int start) {
 		for (int pointer = from; pointer <= to; pointer++, start++) {
 			mainArray[start] = auxArray[pointer];
